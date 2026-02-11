@@ -1,0 +1,136 @@
+const { Op } = require('sequelize')
+const Property=require('../models/Property')
+const User=require('../models/User')
+const PropertyImage=require('../models/PropertyImage')
+
+exports.search=async(req,res)=>{
+    try{
+ const { location, type, purpose, minPrice, maxPrice, bedrooms, minArea, maxArea } = req.query
+ const page = Math.max(parseInt(req.query.page) || 1, 1)
+ const limit = Math.min(Math.max(parseInt(req.query.limit) || 12, 1), 100)
+ const sortBy = ['price','createdAt','bedrooms','area'].includes(req.query.sortBy) ? req.query.sortBy : 'createdAt'
+ const order = req.query.order === 'ASC' ? 'ASC' : 'DESC'
+ const offset = (page - 1) * limit
+
+ const where={}
+ if(location) where.location= {[Op.iLike]:`%${location}%`}
+ if(type && type!=='All') where.type=type
+ if(purpose && purpose!=='All') where.purpose=purpose
+ if(minPrice!=null && minPrice!=='' && !isNaN(Number(minPrice))) where.price={...(where.price||{}),[Op.gte]:Number(minPrice)}
+ if(maxPrice!=null && maxPrice!=='' && !isNaN(Number(maxPrice))) where.price={...(where.price||{}),[Op.lte]:Number(maxPrice)}
+ if(bedrooms && !isNaN(Number(bedrooms))) where.bedrooms=Number(bedrooms)
+ if(minArea!=null && minArea!=='' && !isNaN(Number(minArea))) where.area={...(where.area||{}),[Op.gte]:Number(minArea)}
+ if(maxArea!=null && maxArea!=='' && !isNaN(Number(maxArea))) where.area={...(where.area||{}),[Op.lte]:Number(maxArea)}
+ const status=req.query.status
+ if(status && status!=='All') where.status=status
+ else if(!status) where.status='Available'
+
+const { count, rows } = await Property.findAndCountAll({
+    where,
+    include: [{ model: PropertyImage, where: { is_primary: true }, required: false }],
+    order:[[sortBy, order]],
+    limit,
+    offset,
+})
+
+res.status(200).json({
+    properties: rows,
+    totalCount: count,
+    page,
+    limit,
+    totalPages: Math.ceil(count / limit),
+})
+    }
+    catch(e)
+    {
+        console.error("Search error:", e)
+        return res.status(500).json({error:'Failed to search properties'})
+    }
+}
+exports.getproperty=async(req,res)=>{
+    try{
+        const {id}=req.params
+        if(!id) return res.status(400).json({error:'Property ID is required'})
+         const property= await Property.findByPk(id, { include: [{ model: User, attributes: ['id', 'name', 'email', 'phone'] }, { model: PropertyImage }] })
+        if(!property) return res.status(404).json({error:'Property not found'})
+        return res.status(200).json({property})
+    }
+    catch(e){
+     console.error("Get property error:", e)
+     return res.status(500).json({error:'Failed to fetch property'})
+    }
+}
+exports.createProperty=async(req,res)=>{
+    try{
+        const agent_id=req.user.id
+        const {type,purpose,price,location,bedrooms,area,description}=req.body
+        const required=['type','purpose','price','location','area','description']
+        for(const key of required)
+        {
+            if(req.body[key]==null||req.body[key]=='')
+            return res.status(400).json({error:`${key} is required`})
+        }
+        const property=await Property.create({agent_id,type,purpose,price,location,bedrooms:bedrooms||null,area,description})
+        return res.status(201).json({property})
+    }
+    catch(e){
+        console.error("Create property error:", e)
+        return res.status(500).json({error:'Failed to create property'})
+    }
+}
+exports.updateProperty=async(req,res)=>{
+    try{
+        const id=req.params.id
+        const { type, purpose, price, location, bedrooms, area, description } = req.body
+     if(!id) return res.status(400).json({error:'Property ID is required'})
+        const property=await Property.findByPk(id)
+    if(!property) return res.status(404).json({error:'Property not found'})
+    if(property.agent_id!=req.user.id)return res.status(403).json({error:'You do not own this property'})
+        property.type=type??property.type
+        property.purpose=purpose??property.purpose
+        property.price=price??property.price
+        property.location=location??property.location
+        property.bedrooms=bedrooms??property.bedrooms
+        property.area=area??property.area
+        property.description=description??property.description
+        if(req.body.status && ['Available','Sold','Rented'].includes(req.body.status)){
+            property.status=req.body.status
+        }
+        await property.save()
+    return res.status(200).json(property)
+    }
+    catch(e){
+        console.error("Update property error:", e)
+        return res.status(500).json({error:'Failed to update property'})
+    }
+}
+exports.deleteProperty=async(req,res)=>{
+    try{
+const id=req.params.id
+const property=await Property.findByPk(id)
+if(!property)return res.status(404).json({error:'Property not found'})
+if(property.agent_id!=req.user.id)return res.status(403).json({error:'You do not own this property'})
+await property.destroy()
+res.status(200).json({msg:'Property Deleted Successfully'})
+    }
+    catch(e){
+      console.error("Delete property error:", e)
+      return res.status(500).json({error:'Failed to delete property'})
+    }
+}
+exports.getAgentStats=async(req,res)=>{
+    try{
+        const agentId=req.user.id
+        const all=await Property.findAll({where:{agent_id:agentId},attributes:['id','status','purpose']})
+        const total=all.length
+        const available=all.filter(p=>p.status==='Available').length
+        const sold=all.filter(p=>p.status==='Sold').length
+        const rented=all.filter(p=>p.status==='Rented').length
+        const forSale=all.filter(p=>p.purpose==='Sale'&&p.status==='Available').length
+        const forRent=all.filter(p=>p.purpose==='Rent'&&p.status==='Available').length
+        return res.json({total,available,sold,rented,forSale,forRent,joinedAt:req.user.createdAt})
+    }catch(e){
+        console.error("Agent stats error:",e)
+        return res.status(500).json({error:'Failed to fetch stats'})
+    }
+}

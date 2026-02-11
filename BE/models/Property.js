@@ -1,0 +1,70 @@
+const {DataTypes}=require('sequelize')
+const sequelize=require('../config/db')
+
+const Property=sequelize.define('Property',
+    {
+id:{
+    type:DataTypes.INTEGER,
+    autoIncrement:true,
+    primaryKey:true,
+},
+agent_id:{
+    type:DataTypes.INTEGER,
+    references:{
+         model:'users',
+         key:'id',
+    },
+    onDelete:'CASCADE',
+},
+type:{
+    type:DataTypes.ENUM('House','Apartment','Villa','Commercial','Land'),
+    allowNull:false,
+    defaultValue:'House',
+},
+purpose:{
+    type:DataTypes.ENUM('Sale','Rent'),
+    allowNull:false,
+    defaultValue:'Sale',
+},
+price:{
+type:DataTypes.FLOAT,
+allowNull:false,
+},
+location:{
+type:DataTypes.STRING,
+allowNull:false,
+},
+bedrooms:{
+type:DataTypes.INTEGER,
+allowNull:true,
+},
+area:{
+    type:DataTypes.FLOAT,
+    allowNull:false,
+},
+description:{
+type:DataTypes.TEXT,
+allowNull:false,
+},
+status:{
+    type:DataTypes.ENUM('Available','Sold','Rented'),
+    allowNull:false,
+    defaultValue:'Available',
+},
+    },
+    {
+        timestamps:true,
+        tableName:'properties',
+        indexes:[
+            {fields:['purpose','type'],name:'idx_purpose_type'},
+            {fields:['location'],name:'idx_location'},
+            {fields:['price'],name:'idx_price'},
+            {fields:['area'],name:'idx_area'},
+            {fields:['bedrooms'],name:'idx_bedrooms'},
+            {fields:['agent_id'],name:'idx_agent_id'},
+            {fields:['status'],name:'idx_status'},
+            {fields:['createdAt'],name:'idx_created_at'},
+        ],
+    }
+)
+module.exports=Property;
