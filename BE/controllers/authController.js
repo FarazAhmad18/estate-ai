@@ -219,15 +219,13 @@ exports.changePassword = async (req, res) => {
 exports.deleteAccount = async (req, res) => {
   try {
     const { password } = req.body;
+    if (!password) return res.status(400).json({ error: 'Password is required' });
+
     const user = await User.findByPk(req.user.id);
     if (!user) return res.status(404).json({ error: 'User not found' });
 
-    // Skip password check for Google-authenticated accounts
-    if (!user.googleId) {
-      if (!password) return res.status(400).json({ error: 'Password is required' });
-      const ok = await bcrypt.compare(password, user.password);
-      if (!ok) return res.status(403).json({ error: 'Incorrect password' });
-    }
+    const ok = await bcrypt.compare(password, user.password);
+    if (!ok) return res.status(403).json({ error: 'Incorrect password' });
 
     await user.destroy();
     res.status(200).json({ message: 'Account deleted' });
