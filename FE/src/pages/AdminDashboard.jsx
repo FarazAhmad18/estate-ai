@@ -207,13 +207,13 @@ function OverviewTab() {
   ] : [];
 
   const statCards = [
-    { label: 'Total Users', value: stats.totalUsers, icon: Users, gradient: 'from-blue-500 to-indigo-600' },
-    { label: 'Total Properties', value: stats.totalProperties, icon: Building2, gradient: 'from-emerald-500 to-teal-600' },
-    { label: 'Sold Properties', value: stats.soldProperties || 0, icon: BadgeDollarSign, gradient: 'from-orange-500 to-amber-600' },
-    { label: 'Rented Properties', value: stats.rentedProperties || 0, icon: KeyRound, gradient: 'from-violet-500 to-purple-600' },
-    { label: 'Testimonials', value: stats.totalTestimonials, icon: MessageSquare, gradient: 'from-cyan-500 to-blue-600' },
-    { label: 'Visitors Today', value: stats.visitorsToday, icon: Eye, gradient: 'from-amber-500 to-yellow-600' },
-    { label: 'Deleted Accounts', value: stats.totalDeletedAccounts || 0, icon: UserMinus, gradient: 'from-red-500 to-rose-600' },
+    { label: 'Total Users', value: stats.totalUsers, icon: Users, bg: 'bg-blue-600' },
+    { label: 'Total Properties', value: stats.totalProperties, icon: Building2, bg: 'bg-emerald-600' },
+    { label: 'Sold Properties', value: stats.soldProperties || 0, icon: BadgeDollarSign, bg: 'bg-orange-500' },
+    { label: 'Rented Properties', value: stats.rentedProperties || 0, icon: KeyRound, bg: 'bg-violet-600' },
+    { label: 'Testimonials', value: stats.totalTestimonials, icon: MessageSquare, bg: 'bg-cyan-600' },
+    { label: 'Visitors Today', value: stats.visitorsToday, icon: Eye, bg: 'bg-amber-500' },
+    { label: 'Deleted Accounts', value: stats.totalDeletedAccounts || 0, icon: UserMinus, bg: 'bg-red-500' },
   ];
 
   return (
@@ -222,7 +222,7 @@ function OverviewTab() {
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 mb-8">
         {statCards.map((c, i) => (
           <div key={c.label} className={`bg-white rounded-2xl border border-border/40 p-5 hover:shadow-md transition-all animate-fade-in-up stagger-${Math.min(i + 1, 6)}`}>
-            <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${c.gradient} flex items-center justify-center mb-3 shadow-sm`}>
+            <div className={`w-10 h-10 rounded-xl ${c.bg} flex items-center justify-center mb-3 shadow-sm`}>
               <c.icon size={18} className="text-white" />
             </div>
             <p className="text-2xl font-bold text-primary">{c.value?.toLocaleString()}</p>

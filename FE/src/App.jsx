@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 import { AuthProvider } from './context/AuthContext';
@@ -29,6 +30,10 @@ function AppContent() {
   const isAuthPage = AUTH_ROUTES.includes(pathname);
   const isAdminPage = pathname === '/admin';
   const isMessagesPage = pathname === '/messages';
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
 
   return (
     <>
