@@ -1,10 +1,18 @@
+import { useEffect } from 'react';
 import { X, AlertTriangle } from 'lucide-react';
 
 export default function ConfirmModal({ open, onClose, onConfirm, title, message, confirmText = 'Delete', loading }) {
+  useEffect(() => {
+    if (open) {
+      document.body.style.overflow = 'hidden';
+      return () => { document.body.style.overflow = ''; };
+    }
+  }, [open]);
+
   if (!open) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
       <div className="fixed inset-0 bg-black/40 backdrop-blur-sm animate-fade-in" onClick={onClose} />
       <div className="relative bg-white rounded-2xl shadow-2xl shadow-black/10 max-w-sm w-full p-6 animate-scale-in">
         <button onClick={onClose} className="absolute top-4 right-4 w-8 h-8 rounded-lg flex items-center justify-center text-muted hover:text-secondary hover:bg-surface transition-all">

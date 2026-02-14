@@ -18,15 +18,21 @@ export default function Register() {
 
   const update = (key, val) => setForm((f) => ({ ...f, [key]: val }));
 
+  const getRedirectPath = (user) => {
+    if (user?.role === 'Admin') return '/admin';
+    if (user?.role === 'Agent') return '/dashboard';
+    return '/';
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (form.password !== form.confirmPassword) return toast.error('Passwords do not match');
     if (form.password.length < 6) return toast.error('Password must be at least 6 characters');
     setLoading(true);
     try {
-      await register(form.name, form.email, form.password, form.role);
+      const data = await register(form.name, form.email, form.password, form.role);
       toast.success('Account created! Welcome to EstateAI.');
-      navigate('/');
+      navigate(getRedirectPath(data.user));
     } catch (err) {
       toast.error(err.response?.data?.error || 'Registration failed');
     } finally {
@@ -37,9 +43,9 @@ export default function Register() {
   const handleGoogle = async (credentialResponse) => {
     setGoogleLoading(true);
     try {
-      await googleLogin(credentialResponse.credential);
+      const data = await googleLogin(credentialResponse.credential);
       toast.success('Welcome to EstateAI!');
-      navigate('/');
+      navigate(getRedirectPath(data.user));
     } catch (err) {
       toast.error(err.response?.data?.error || 'Google login failed');
     } finally {

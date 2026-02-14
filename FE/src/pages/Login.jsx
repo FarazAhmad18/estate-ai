@@ -13,13 +13,19 @@ export default function Login() {
   const [loading, setLoading] = useState(false);
   const [googleLoading, setGoogleLoading] = useState(false);
 
+  const getRedirectPath = (user) => {
+    if (user?.role === 'Admin') return '/admin';
+    if (user?.role === 'Agent') return '/dashboard';
+    return '/';
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     try {
-      await login(form.email, form.password);
+      const data = await login(form.email, form.password);
       toast.success('Welcome back!');
-      navigate('/');
+      navigate(getRedirectPath(data.user));
     } catch (err) {
       toast.error(err.response?.data?.error || 'Login failed');
     } finally {
@@ -30,9 +36,9 @@ export default function Login() {
   const handleGoogle = async (credentialResponse) => {
     setGoogleLoading(true);
     try {
-      await googleLogin(credentialResponse.credential);
+      const data = await googleLogin(credentialResponse.credential);
       toast.success('Welcome!');
-      navigate('/');
+      navigate(getRedirectPath(data.user));
     } catch (err) {
       toast.error(err.response?.data?.error || 'Google login failed');
     } finally {
