@@ -116,7 +116,7 @@ export default function ChatBubble() {
     <>
       {/* Chat Panel */}
       {isOpen && (
-        <div className="fixed z-50 bg-white flex flex-col overflow-hidden bottom-0 right-0 left-0 top-14 sm:inset-auto sm:bottom-24 sm:right-6 sm:w-[360px] sm:h-[460px] sm:rounded-2xl sm:shadow-2xl sm:shadow-black/15 sm:border sm:border-border/60">
+        <div className="fixed z-50 bg-white flex flex-col overflow-hidden bottom-0 right-0 left-0 top-14 sm:inset-auto sm:bottom-6 sm:right-6 sm:w-[360px] sm:h-[460px] sm:rounded-2xl sm:shadow-2xl sm:shadow-black/15 sm:border sm:border-border/60">
           {/* Header */}
           <div className="flex items-center justify-between px-4 py-3 border-b border-border/40 flex-shrink-0" style={{ background: 'linear-gradient(to right, var(--color-accent, #3b82f6), #8b5cf6)' }}>
             <div className="flex items-center gap-2">
@@ -137,12 +137,12 @@ export default function ChatBubble() {
           </div>
 
           {/* Messages */}
-          <div className="flex-1 overflow-y-auto px-4 py-4 space-y-4 min-h-0">
+          <div className="flex-1 overflow-y-auto px-3 py-3 space-y-3 sm:px-4 sm:py-4 sm:space-y-4 min-h-0">
             {messages.map((msg, i) => (
               <div key={i} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
                 <div style={{ maxWidth: '85%' }}>
                   <div
-                    className={`px-4 py-2.5 rounded-2xl text-sm leading-relaxed ${
+                    className={`px-3 py-2 sm:px-4 sm:py-2.5 rounded-2xl text-[13px] sm:text-sm leading-relaxed ${
                       msg.role === 'user'
                         ? 'bg-accent text-white rounded-br-md'
                         : 'bg-surface text-primary rounded-bl-md'
@@ -178,7 +178,7 @@ export default function ChatBubble() {
           </div>
 
           {/* Input */}
-          <div className="px-4 py-3 border-t border-border/40 flex-shrink-0" style={{ paddingBottom: 'max(0.75rem, env(safe-area-inset-bottom))' }}>
+          <div className="px-3 py-2 sm:px-4 sm:py-3 border-t border-border/40 flex-shrink-0" style={{ paddingBottom: 'max(0.5rem, env(safe-area-inset-bottom))' }}>
             <div className="flex items-center gap-2">
               <input
                 ref={inputRef}
@@ -187,13 +187,13 @@ export default function ChatBubble() {
                 onChange={(e) => setInput(e.target.value)}
                 onKeyDown={handleKeyDown}
                 placeholder="Search properties or ask a question..."
-                className="flex-1 px-4 py-2.5 bg-surface rounded-xl text-sm border border-border/60 focus:border-accent focus:ring-2 focus:ring-accent/10 transition-all placeholder:text-muted outline-none"
+                className="flex-1 px-3 py-2 bg-surface rounded-xl text-base sm:text-sm border border-border/60 focus:border-accent focus:ring-2 focus:ring-accent/10 transition-all placeholder:text-muted outline-none"
                 disabled={isLoading}
               />
               <button
                 onClick={sendMessage}
                 disabled={!input.trim() || isLoading}
-                className="w-10 h-10 rounded-xl bg-accent text-white flex items-center justify-center hover:bg-accent/90 transition-colors disabled:opacity-40 disabled:cursor-not-allowed flex-shrink-0"
+                className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-accent text-white flex items-center justify-center hover:bg-accent/90 transition-colors disabled:opacity-40 disabled:cursor-not-allowed flex-shrink-0"
               >
                 {isLoading ? <Loader2 size={16} className="animate-spin" /> : <Send size={16} />}
               </button>
