@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Eye, EyeOff, Mail, Lock, User, ArrowRight, Building2, ShoppingBag, Sparkles } from 'lucide-react';
+import { Eye, EyeOff, Mail, Lock, User, ArrowRight, Building2, ShoppingBag, Sparkles, Check } from 'lucide-react';
 import { GoogleLogin } from '@react-oauth/google';
 import { useAuth } from '../context/AuthContext';
 import toast from 'react-hot-toast';
@@ -15,6 +15,7 @@ export default function Register() {
   const [showCpw, setShowCpw] = useState(false);
   const [loading, setLoading] = useState(false);
   const [googleLoading, setGoogleLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
 
   const update = (key, val) => setForm((f) => ({ ...f, [key]: val }));
 
@@ -31,11 +32,11 @@ export default function Register() {
     setLoading(true);
     try {
       const data = await register(form.name, form.email, form.password, form.role);
-      toast.success('Account created! Welcome to EstateAI.');
-      navigate(getRedirectPath(data.user));
+      setLoading(false);
+      setSuccess(true);
+      setTimeout(() => navigate(getRedirectPath(data.user)), 800);
     } catch (err) {
       toast.error(err.response?.data?.error || 'Registration failed');
-    } finally {
       setLoading(false);
     }
   };
@@ -44,11 +45,11 @@ export default function Register() {
     setGoogleLoading(true);
     try {
       const data = await googleLogin(credentialResponse.credential);
-      toast.success('Welcome to EstateAI!');
-      navigate(getRedirectPath(data.user));
+      setGoogleLoading(false);
+      setSuccess(true);
+      setTimeout(() => navigate(getRedirectPath(data.user)), 800);
     } catch (err) {
       toast.error(err.response?.data?.error || 'Google login failed');
-    } finally {
       setGoogleLoading(false);
     }
   };
@@ -61,7 +62,20 @@ export default function Register() {
         <div className="absolute bottom-0 right-0 w-[400px] h-[400px] rounded-full bg-accent/5 blur-3xl translate-y-1/4 translate-x-1/4" />
       </div>
 
-      <div className="w-full max-w-[420px] relative z-10 animate-fade-in-up">
+      {/* Success overlay */}
+      {success && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-white/80 backdrop-blur-sm animate-fade-in">
+          <div className="text-center animate-scale-in">
+            <div className="w-16 h-16 rounded-full bg-green-500 flex items-center justify-center mx-auto mb-4 shadow-lg shadow-green-500/30">
+              <Check size={32} className="text-white" strokeWidth={3} />
+            </div>
+            <p className="text-lg font-semibold text-primary">Account created!</p>
+            <p className="text-sm text-muted mt-1">Setting up your profile...</p>
+          </div>
+        </div>
+      )}
+
+      <div className={`w-full max-w-[420px] relative z-10 animate-fade-in-up transition-all duration-300 ${success ? 'opacity-0 scale-95' : ''}`}>
         {/* Logo */}
         <div className="flex items-center justify-center gap-2.5 mb-8">
           <div className="w-9 h-9 rounded-xl gradient-accent flex items-center justify-center shadow-lg shadow-accent/20">
@@ -223,11 +237,14 @@ export default function Register() {
 
             <button
               type="submit"
-              disabled={loading}
+              disabled={loading || success}
               className="w-full py-3 rounded-xl text-sm font-semibold text-white btn-primary disabled:opacity-50 flex items-center justify-center gap-2 mt-1"
             >
               {loading ? (
-                <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                <>
+                  <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                  Creating account...
+                </>
               ) : (
                 <>Create Account <ArrowRight size={14} /></>
               )}

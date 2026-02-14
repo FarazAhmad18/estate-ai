@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Eye, EyeOff, Mail, Lock, ArrowRight, Sparkles } from 'lucide-react';
+import { Eye, EyeOff, Mail, Lock, ArrowRight, Sparkles, Check } from 'lucide-react';
 import { GoogleLogin } from '@react-oauth/google';
 import { useAuth } from '../context/AuthContext';
 import toast from 'react-hot-toast';
@@ -12,6 +12,7 @@ export default function Login() {
   const [showPw, setShowPw] = useState(false);
   const [loading, setLoading] = useState(false);
   const [googleLoading, setGoogleLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
 
   const getRedirectPath = (user) => {
     if (user?.role === 'Admin') return '/admin';
@@ -24,11 +25,11 @@ export default function Login() {
     setLoading(true);
     try {
       const data = await login(form.email, form.password);
-      toast.success('Welcome back!');
-      navigate(getRedirectPath(data.user));
+      setLoading(false);
+      setSuccess(true);
+      setTimeout(() => navigate(getRedirectPath(data.user)), 800);
     } catch (err) {
       toast.error(err.response?.data?.error || 'Login failed');
-    } finally {
       setLoading(false);
     }
   };
@@ -37,11 +38,11 @@ export default function Login() {
     setGoogleLoading(true);
     try {
       const data = await googleLogin(credentialResponse.credential);
-      toast.success('Welcome!');
-      navigate(getRedirectPath(data.user));
+      setGoogleLoading(false);
+      setSuccess(true);
+      setTimeout(() => navigate(getRedirectPath(data.user)), 800);
     } catch (err) {
       toast.error(err.response?.data?.error || 'Google login failed');
-    } finally {
       setGoogleLoading(false);
     }
   };
@@ -54,7 +55,20 @@ export default function Login() {
         <div className="absolute bottom-0 left-0 w-[400px] h-[400px] rounded-full bg-purple-500/5 blur-3xl translate-y-1/3 -translate-x-1/4" />
       </div>
 
-      <div className="w-full max-w-[420px] relative z-10 animate-fade-in-up">
+      {/* Success overlay */}
+      {success && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-white/80 backdrop-blur-sm animate-fade-in">
+          <div className="text-center animate-scale-in">
+            <div className="w-16 h-16 rounded-full bg-green-500 flex items-center justify-center mx-auto mb-4 shadow-lg shadow-green-500/30">
+              <Check size={32} className="text-white" strokeWidth={3} />
+            </div>
+            <p className="text-lg font-semibold text-primary">Welcome back!</p>
+            <p className="text-sm text-muted mt-1">Redirecting you now...</p>
+          </div>
+        </div>
+      )}
+
+      <div className={`w-full max-w-[420px] relative z-10 animate-fade-in-up transition-all duration-300 ${success ? 'opacity-0 scale-95' : ''}`}>
         {/* Logo */}
         <div className="flex items-center justify-center gap-2.5 mb-8">
           <div className="w-9 h-9 rounded-xl gradient-accent flex items-center justify-center shadow-lg shadow-accent/20">
@@ -107,8 +121,9 @@ export default function Login() {
                   value={form.email}
                   onChange={(e) => setForm({ ...form, email: e.target.value })}
                   required
+                  disabled={loading || success}
                   placeholder="name@example.com"
-                  className="w-full pl-10 pr-4 py-3 bg-surface/60 rounded-xl text-sm border border-border/60 focus:border-accent focus:ring-2 focus:ring-accent/10 focus:bg-white transition-all placeholder:text-muted/50"
+                  className="w-full pl-10 pr-4 py-3 bg-surface/60 rounded-xl text-sm border border-border/60 focus:border-accent focus:ring-2 focus:ring-accent/10 focus:bg-white transition-all placeholder:text-muted/50 disabled:opacity-60"
                 />
               </div>
             </div>
@@ -122,8 +137,9 @@ export default function Login() {
                   value={form.password}
                   onChange={(e) => setForm({ ...form, password: e.target.value })}
                   required
+                  disabled={loading || success}
                   placeholder="Enter your password"
-                  className="w-full pl-10 pr-11 py-3 bg-surface/60 rounded-xl text-sm border border-border/60 focus:border-accent focus:ring-2 focus:ring-accent/10 focus:bg-white transition-all placeholder:text-muted/50"
+                  className="w-full pl-10 pr-11 py-3 bg-surface/60 rounded-xl text-sm border border-border/60 focus:border-accent focus:ring-2 focus:ring-accent/10 focus:bg-white transition-all placeholder:text-muted/50 disabled:opacity-60"
                 />
                 <button
                   type="button"
@@ -137,11 +153,14 @@ export default function Login() {
 
             <button
               type="submit"
-              disabled={loading}
+              disabled={loading || success}
               className="w-full py-3 rounded-xl text-sm font-semibold text-white btn-primary disabled:opacity-50 flex items-center justify-center gap-2 mt-2"
             >
               {loading ? (
-                <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                <>
+                  <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                  Signing in...
+                </>
               ) : (
                 <>Sign in <ArrowRight size={14} /></>
               )}
