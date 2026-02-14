@@ -115,7 +115,7 @@ export default function Home() {
   return (
     <div>
       {/* Hero */}
-      <section className="relative min-h-screen pt-16 flex items-center overflow-hidden">
+      <section className="relative pt-24 pb-16 sm:pt-28 sm:pb-20 lg:min-h-screen lg:pt-16 lg:flex lg:items-center overflow-hidden">
         {/* Background mesh gradient */}
         <div className="absolute inset-0 mesh-gradient" />
         <div className="absolute top-20 right-0 w-[500px] h-[500px] bg-accent/[0.04] rounded-full blur-[100px]" />
@@ -124,7 +124,7 @@ export default function Home() {
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 w-full">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             {/* Left */}
-            <div className="pt-12 lg:pt-0 animate-fade-in-up">
+            <div className="animate-fade-in-up">
               <div className="inline-flex items-center gap-2 px-4 py-2 bg-accent/[0.08] rounded-full text-xs font-semibold text-accent mb-6 border border-accent/10">
                 <Sparkles size={12} />
                 AI-Powered Real Estate Platform
@@ -314,13 +314,13 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6">
             {[
-              { value: '500+', label: 'Properties Listed', icon: Building2, gradient: 'from-blue-500 to-blue-600' },
-              { value: '200+', label: 'Verified Agents', icon: Users, gradient: 'from-emerald-500 to-emerald-600' },
-              { value: '50+', label: 'Cities Covered', icon: HomeIcon, gradient: 'from-amber-500 to-orange-500' },
-              { value: '1000+', label: 'Happy Clients', icon: CheckCircle, gradient: 'from-purple-500 to-violet-600' },
+              { value: '500+', label: 'Properties Listed', icon: Building2, bg: 'bg-blue-600' },
+              { value: '200+', label: 'Verified Agents', icon: Users, bg: 'bg-emerald-600' },
+              { value: '50+', label: 'Cities Covered', icon: HomeIcon, bg: 'bg-amber-500' },
+              { value: '1000+', label: 'Happy Clients', icon: CheckCircle, bg: 'bg-purple-600' },
             ].map((stat) => (
               <div key={stat.label} className="bg-white rounded-2xl p-6 sm:p-8 border border-border/50 text-center hover:shadow-lg hover:shadow-black/[0.04] hover:-translate-y-0.5 transition-all duration-300">
-                <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${stat.gradient} flex items-center justify-center mx-auto mb-4 shadow-lg shadow-black/10`}>
+                <div className={`w-12 h-12 rounded-xl ${stat.bg} flex items-center justify-center mx-auto mb-4 shadow-lg shadow-black/10`}>
                   <stat.icon size={20} className="text-white" />
                 </div>
                 <p className="text-3xl sm:text-4xl font-bold text-primary tracking-tight">{stat.value}</p>
@@ -397,23 +397,23 @@ export default function Home() {
                     icon: Sparkles,
                     title: 'AI-Powered Insights',
                     desc: 'Get intelligent property analysis, market trends, and personalized recommendations.',
-                    gradient: 'from-blue-500 to-blue-600',
+                    bg: 'bg-blue-600',
                   },
                   {
                     icon: Shield,
                     title: 'Verified Listings',
                     desc: 'Every property and agent is verified to ensure accurate, trustworthy information.',
-                    gradient: 'from-emerald-500 to-emerald-600',
+                    bg: 'bg-emerald-600',
                   },
                   {
                     icon: Building2,
                     title: 'Seamless Experience',
                     desc: 'From search to close, enjoy a streamlined process designed for modern users.',
-                    gradient: 'from-purple-500 to-violet-600',
+                    bg: 'bg-purple-600',
                   },
                 ].map((feature) => (
                   <div key={feature.title} className="flex gap-4 p-4 rounded-2xl hover:bg-white hover:shadow-sm transition-all duration-200 group">
-                    <div className={`w-11 h-11 rounded-xl bg-gradient-to-br ${feature.gradient} flex items-center justify-center flex-shrink-0 shadow-sm`}>
+                    <div className={`w-11 h-11 rounded-xl ${feature.bg} flex items-center justify-center flex-shrink-0 shadow-sm`}>
                       <feature.icon size={18} className="text-white" />
                     </div>
                     <div>

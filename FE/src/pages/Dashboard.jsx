@@ -176,17 +176,17 @@ export default function Dashboard() {
         {stats && (
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8 animate-fade-in-up stagger-1">
             {[
-              { label: 'Total Properties', value: stats.total, icon: Building2, gradient: 'from-blue-500 to-blue-600', bg: 'bg-blue-50' },
-              { label: 'Active Listings', value: stats.available, icon: Home, gradient: 'from-emerald-500 to-emerald-600', bg: 'bg-emerald-50' },
-              { label: 'Sold', value: stats.sold, icon: CheckCircle2, gradient: 'from-red-500 to-red-600', bg: 'bg-red-50' },
-              { label: 'Rented', value: stats.rented, icon: TrendingUp, gradient: 'from-blue-500 to-indigo-600', bg: 'bg-blue-50' },
-              { label: 'Avg Rating', value: stats.avgRating || '—', suffix: stats.avgRating ? '/ 5' : '', icon: Star, gradient: 'from-amber-500 to-orange-500', bg: 'bg-amber-50' },
-              { label: 'Reviews', value: stats.totalReviews || 0, icon: User, gradient: 'from-purple-500 to-violet-600', bg: 'bg-purple-50' },
-              { label: 'Total Saves', value: stats.totalFavorites || 0, icon: Heart, gradient: 'from-rose-500 to-pink-600', bg: 'bg-rose-50' },
-              { label: 'Member Since', value: formatDate(stats.joinedAt), icon: CalendarDays, gradient: 'from-amber-500 to-orange-500', bg: 'bg-amber-50', isDate: true },
+              { label: 'Total Properties', value: stats.total, icon: Building2, bg: 'bg-blue-600' },
+              { label: 'Active Listings', value: stats.available, icon: Home, bg: 'bg-emerald-600' },
+              { label: 'Sold', value: stats.sold, icon: CheckCircle2, bg: 'bg-red-500' },
+              { label: 'Rented', value: stats.rented, icon: TrendingUp, bg: 'bg-indigo-600' },
+              { label: 'Avg Rating', value: stats.avgRating || '—', suffix: stats.avgRating ? '/ 5' : '', icon: Star, bg: 'bg-amber-500' },
+              { label: 'Reviews', value: stats.totalReviews || 0, icon: User, bg: 'bg-purple-600' },
+              { label: 'Total Saves', value: stats.totalFavorites || 0, icon: Heart, bg: 'bg-rose-500' },
+              { label: 'Member Since', value: formatDate(stats.joinedAt), icon: CalendarDays, bg: 'bg-orange-500', isDate: true },
             ].map((s) => (
               <div key={s.label} className="bg-white rounded-2xl border border-border/50 p-5 hover:shadow-md hover:shadow-black/[0.03] transition-all duration-200">
-                <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${s.gradient} flex items-center justify-center mb-3 shadow-sm`}>
+                <div className={`w-10 h-10 rounded-xl ${s.bg} flex items-center justify-center mb-3 shadow-sm`}>
                   <s.icon size={18} className="text-white" />
                 </div>
                 <div className="flex items-baseline gap-1.5">

@@ -206,13 +206,13 @@ export default function AgentProfile() {
         {stats && (
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-6 animate-fade-in-up stagger-1">
             {[
-              { label: 'Total Listings', value: stats.totalListings, icon: Building2, gradient: 'from-blue-500 to-blue-600' },
-              { label: 'Avg Rating', value: stats.avgRating || '—', suffix: `(${stats.totalReviews})`, icon: Star, gradient: 'from-amber-500 to-orange-500' },
-              { label: 'Sold', value: stats.sold, icon: CheckCircle2, gradient: 'from-red-500 to-red-600' },
-              { label: 'Rented', value: stats.rented, icon: TrendingUp, gradient: 'from-blue-500 to-indigo-600' },
+              { label: 'Total Listings', value: stats.totalListings, icon: Building2, bg: 'bg-blue-600' },
+              { label: 'Avg Rating', value: stats.avgRating || '—', suffix: `(${stats.totalReviews})`, icon: Star, bg: 'bg-amber-500' },
+              { label: 'Sold', value: stats.sold, icon: CheckCircle2, bg: 'bg-red-500' },
+              { label: 'Rented', value: stats.rented, icon: TrendingUp, bg: 'bg-indigo-600' },
             ].map((s) => (
               <div key={s.label} className="bg-white rounded-2xl border border-border/50 p-5 hover:shadow-md hover:shadow-black/[0.03] transition-all duration-200">
-                <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${s.gradient} flex items-center justify-center mb-3 shadow-sm`}>
+                <div className={`w-10 h-10 rounded-xl ${s.bg} flex items-center justify-center mb-3 shadow-sm`}>
                   <s.icon size={18} className="text-white" />
                 </div>
                 <div className="flex items-baseline gap-1.5">

@@ -261,18 +261,9 @@ export default function Navbar() {
       <div className={`fixed top-16 left-0 right-0 z-40 md:hidden transition-all duration-300 ease-out ${
         mobileOpen ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4 pointer-events-none'
       }`}>
-        <div className="bg-white border-b border-border/50 shadow-xl shadow-black/5 px-4 py-5 max-h-[calc(100dvh-4rem)] overflow-y-auto">
-          <div className="space-y-1">
-            <Link to="/" className="flex items-center gap-3 px-3 py-3 text-sm font-medium text-secondary rounded-xl hover:bg-surface transition-colors">
-              <Home size={16} className="text-muted" /> Home
-            </Link>
-            <Link to="/properties" className="flex items-center gap-3 px-3 py-3 text-sm font-medium text-secondary rounded-xl hover:bg-surface transition-colors">
-              <Building2 size={16} className="text-muted" /> Properties
-            </Link>
-          </div>
-
+        <div className="bg-white border-b border-border/50 shadow-xl shadow-black/5 px-4 py-4 max-h-[calc(100dvh-4rem)] overflow-y-auto">
           {loading ? (
-            <div className="flex items-center gap-3 px-3 py-4 mt-3">
+            <div className="flex items-center gap-3 px-3 py-3">
               <div className="w-10 h-10 rounded-full skeleton" />
               <div className="space-y-2">
                 <div className="w-24 h-4 skeleton" />
@@ -281,57 +272,62 @@ export default function Navbar() {
             </div>
           ) : user ? (
             <>
-              {/* User info in mobile */}
-              <div className="flex items-center gap-3 px-3 py-4 mt-3 mb-1 border-t border-b border-border/50">
-                <div className="w-10 h-10 rounded-full gradient-accent flex items-center justify-center overflow-hidden ring-2 ring-white shadow-sm">
+              {/* User profile card - at top */}
+              <div className="flex items-center gap-3 px-3 py-3 mb-3 bg-surface rounded-2xl">
+                <div className="w-11 h-11 rounded-full gradient-accent flex items-center justify-center overflow-hidden ring-2 ring-white shadow-sm">
                   {user.avatar_url ? (
                     <img src={user.avatar_url} alt="" className="w-full h-full object-cover" />
                   ) : (
-                    <span className="text-xs font-bold text-white">{userInitial}</span>
+                    <span className="text-sm font-bold text-white">{userInitial}</span>
                   )}
                 </div>
                 <div className="min-w-0 flex-1">
                   <p className="text-sm font-semibold text-primary truncate">{user.name}</p>
-                  <p className="text-xs text-muted truncate">{user.email}</p>
+                  <p className="text-[11px] text-muted truncate">{user.email}</p>
                 </div>
                 <span className="text-[10px] font-semibold uppercase tracking-wider text-white bg-accent/90 px-2.5 py-0.5 rounded-full flex-shrink-0">
                   {user.role}
                 </span>
               </div>
 
-              <div className="space-y-1 mt-1">
-                <Link to="/profile" className="flex items-center gap-3 px-3 py-3 text-sm font-medium text-secondary rounded-xl hover:bg-surface transition-colors">
-                  <User size={16} className="text-muted" /> Profile
+              {/* Navigation links */}
+              <div className="space-y-0.5">
+                <Link to="/" onClick={() => setMobileOpen(false)} className={`flex items-center gap-3 px-3 py-3 text-sm font-medium rounded-xl transition-colors ${isActive('/') ? 'bg-accent/5 text-accent' : 'text-secondary hover:bg-surface'}`}>
+                  <Home size={16} className={isActive('/') ? 'text-accent' : 'text-muted'} /> Home
                 </Link>
-                <Link
-                  to="/messages"
-                  className="flex items-center gap-3 px-3 py-3 text-sm font-medium text-secondary rounded-xl hover:bg-surface transition-colors"
-                >
-                  <MessageSquare size={16} className="text-muted" /> Messages
+                <Link to="/properties" onClick={() => setMobileOpen(false)} className={`flex items-center gap-3 px-3 py-3 text-sm font-medium rounded-xl transition-colors ${isActive('/properties') ? 'bg-accent/5 text-accent' : 'text-secondary hover:bg-surface'}`}>
+                  <Building2 size={16} className={isActive('/properties') ? 'text-accent' : 'text-muted'} /> Properties
+                </Link>
+                <Link to="/messages" onClick={() => setMobileOpen(false)} className={`flex items-center gap-3 px-3 py-3 text-sm font-medium rounded-xl transition-colors ${isActive('/messages') ? 'bg-accent/5 text-accent' : 'text-secondary hover:bg-surface'}`}>
+                  <MessageSquare size={16} className={isActive('/messages') ? 'text-accent' : 'text-muted'} /> Messages
                   {unreadCount > 0 && (
                     <span className="ml-auto text-[10px] font-bold bg-accent text-white min-w-[20px] h-5 rounded-full flex items-center justify-center px-1.5">
                       {unreadCount > 9 ? '9+' : unreadCount}
                     </span>
                   )}
                 </Link>
-                <Link to="/saved" className="flex items-center gap-3 px-3 py-3 text-sm font-medium text-secondary rounded-xl hover:bg-surface transition-colors">
-                  <Heart size={16} className="text-muted" /> Saved
+                <Link to="/saved" onClick={() => setMobileOpen(false)} className={`flex items-center gap-3 px-3 py-3 text-sm font-medium rounded-xl transition-colors ${isActive('/saved') ? 'bg-accent/5 text-accent' : 'text-secondary hover:bg-surface'}`}>
+                  <Heart size={16} className={isActive('/saved') ? 'text-accent' : 'text-muted'} /> Saved
+                </Link>
+                <Link to="/profile" onClick={() => setMobileOpen(false)} className={`flex items-center gap-3 px-3 py-3 text-sm font-medium rounded-xl transition-colors ${isActive('/profile') ? 'bg-accent/5 text-accent' : 'text-secondary hover:bg-surface'}`}>
+                  <User size={16} className={isActive('/profile') ? 'text-accent' : 'text-muted'} /> Profile
                 </Link>
                 {user.role === 'Agent' && (
-                  <Link to="/dashboard" className="flex items-center gap-3 px-3 py-3 text-sm font-medium text-secondary rounded-xl hover:bg-surface transition-colors">
-                    <LayoutDashboard size={16} className="text-muted" /> Dashboard
+                  <Link to="/dashboard" onClick={() => setMobileOpen(false)} className={`flex items-center gap-3 px-3 py-3 text-sm font-medium rounded-xl transition-colors ${isActive('/dashboard') ? 'bg-accent/5 text-accent' : 'text-secondary hover:bg-surface'}`}>
+                    <LayoutDashboard size={16} className={isActive('/dashboard') ? 'text-accent' : 'text-muted'} /> Dashboard
                   </Link>
                 )}
                 {user.role === 'Admin' && (
-                  <Link to="/admin" className="flex items-center gap-3 px-3 py-3 text-sm font-medium text-secondary rounded-xl hover:bg-surface transition-colors">
-                    <Shield size={16} className="text-muted" /> Admin
+                  <Link to="/admin" onClick={() => setMobileOpen(false)} className={`flex items-center gap-3 px-3 py-3 text-sm font-medium rounded-xl transition-colors ${isActive('/admin') ? 'bg-accent/5 text-accent' : 'text-secondary hover:bg-surface'}`}>
+                    <Shield size={16} className={isActive('/admin') ? 'text-accent' : 'text-muted'} /> Admin
                   </Link>
                 )}
               </div>
 
+              {/* Sign out */}
               <div className="mt-3 pt-3 border-t border-border/50">
                 <button
-                  onClick={handleLogout}
+                  onClick={() => { handleLogout(); setMobileOpen(false); }}
                   className="flex items-center gap-3 w-full px-3 py-3 text-sm font-medium text-danger rounded-xl hover:bg-red-50 transition-colors"
                 >
                   <LogOut size={16} /> Sign out
@@ -339,20 +335,33 @@ export default function Navbar() {
               </div>
             </>
           ) : (
-            <div className="flex flex-col gap-2.5 pt-4 border-t border-border/50 mt-3">
-              <Link
-                to="/login"
-                className="block text-center text-sm font-medium text-secondary py-3 rounded-xl border border-border/50 hover:bg-surface transition-colors"
-              >
-                Sign in
-              </Link>
-              <Link
-                to="/register"
-                className="block text-center text-sm font-medium text-white py-3 rounded-xl btn-primary"
-              >
-                Get Started
-              </Link>
-            </div>
+            <>
+              {/* Nav links for logged out */}
+              <div className="space-y-0.5 mb-4">
+                <Link to="/" onClick={() => setMobileOpen(false)} className={`flex items-center gap-3 px-3 py-3 text-sm font-medium rounded-xl transition-colors ${isActive('/') ? 'bg-accent/5 text-accent' : 'text-secondary hover:bg-surface'}`}>
+                  <Home size={16} className={isActive('/') ? 'text-accent' : 'text-muted'} /> Home
+                </Link>
+                <Link to="/properties" onClick={() => setMobileOpen(false)} className={`flex items-center gap-3 px-3 py-3 text-sm font-medium rounded-xl transition-colors ${isActive('/properties') ? 'bg-accent/5 text-accent' : 'text-secondary hover:bg-surface'}`}>
+                  <Building2 size={16} className={isActive('/properties') ? 'text-accent' : 'text-muted'} /> Properties
+                </Link>
+              </div>
+              <div className="flex flex-col gap-2.5 pt-3 border-t border-border/50">
+                <Link
+                  to="/login"
+                  onClick={() => setMobileOpen(false)}
+                  className="block text-center text-sm font-medium text-secondary py-3 rounded-xl border border-border/50 hover:bg-surface transition-colors"
+                >
+                  Sign in
+                </Link>
+                <Link
+                  to="/register"
+                  onClick={() => setMobileOpen(false)}
+                  className="block text-center text-sm font-medium text-white py-3 rounded-xl btn-primary"
+                >
+                  Get Started
+                </Link>
+              </div>
+            </>
           )}
         </div>
       </div>
