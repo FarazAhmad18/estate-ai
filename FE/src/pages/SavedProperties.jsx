@@ -41,12 +41,18 @@ export default function SavedProperties() {
   };
 
   return (
-    <div className="min-h-screen pt-24 pb-16 mesh-gradient">
+    <div className="min-h-screen pt-24 pb-16 bg-surface">
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
-        <div className="mb-10 animate-fade-in-up">
-          <p className="text-xs font-semibold uppercase tracking-wider text-accent mb-2">Collection</p>
-          <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-primary tracking-tight">Saved Properties</h1>
-          <p className="mt-2 text-muted text-sm sm:text-base">Properties you've saved for later.</p>
+        <div className="mb-8 animate-fade-in-up">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-primary tracking-tight flex items-center gap-3">
+            <Heart size={26} className="text-red-500 fill-red-500" />
+            Saved Properties
+          </h1>
+          <p className="mt-2 text-muted text-sm sm:text-base">
+            {properties.length > 0
+              ? `${properties.length} ${properties.length === 1 ? 'property' : 'properties'} you've saved`
+              : "Properties you've saved for later"}
+          </p>
         </div>
 
         {loading ? (

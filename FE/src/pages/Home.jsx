@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Search, ArrowRight, Building2, Shield, Sparkles, MapPin, Star, Quote, Trash2, TrendingUp, Users, Home as HomeIcon, CheckCircle, Bot, PenTool, MessageSquare, Zap } from 'lucide-react';
+import { Search, ArrowRight, Building2, Shield, Sparkles, MapPin, Star, Quote, Trash2, TrendingUp, Users, Home as HomeIcon, CheckCircle, Bot, PenTool, MessageSquare, Zap, Briefcase, Map as MapIcon, Flame } from 'lucide-react';
 import toast from 'react-hot-toast';
 import api from '../lib/api';
 import { useAuth } from '../context/AuthContext';
@@ -16,10 +16,8 @@ import room3 from '../assets/room-3.png';
 import room4 from '../assets/room-4.png';
 import room5 from '../assets/room-5.png';
 import room6 from '../assets/room-6.png';
-import avatar1 from '../assets/avatar-1.png';
-import avatar2 from '../assets/avatar-2.png';
+import room7 from '../assets/room-7.png';
 import avatar3 from '../assets/avatar-3.png';
-import avatar4 from '../assets/avatar-4.png';
 
 export default function Home() {
   const { user } = useAuth();
@@ -128,17 +126,17 @@ export default function Home() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             {/* Left */}
             <div className="animate-fade-in-up">
-              <div className="inline-flex items-center gap-2 px-4 py-2 bg-accent/[0.08] rounded-full text-xs font-semibold text-accent mb-6 border border-accent/10">
-                <Sparkles size={12} />
-                AI-Powered Real Estate Platform
+              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 bg-white rounded-full text-xs font-semibold text-secondary mb-6 border border-border/60 shadow-sm">
+                <Shield size={12} className="text-accent" />
+                Verified property listings · Pakistan
               </div>
               <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-[4.25rem] font-bold tracking-tight text-primary leading-[1.08]">
-                Find your next
+                Find a home
                 <br />
-                <span className="gradient-text">perfect place.</span>
+                you'll love coming back to.
               </h1>
               <p className="mt-6 text-base sm:text-lg text-muted max-w-md leading-relaxed">
-                Discover properties across Pakistan with intelligent search, verified listings, and a seamless experience.
+                Browse houses, apartments, and plots in Lahore, Karachi, Islamabad and beyond — with verified agents and direct messaging.
               </p>
 
               <form onSubmit={handleSearch} className="mt-8 max-w-md">
@@ -182,31 +180,8 @@ export default function Home() {
                 ))}
               </div>
 
-              {/* Trust bar */}
-              <div className="mt-10 flex items-center gap-6 animate-fade-in-up stagger-2">
-                <div className="flex -space-x-2.5">
-                  {[avatar1, avatar2, avatar3, avatar4].map((av, i) => (
-                    <img
-                      key={i}
-                      src={av}
-                      alt=""
-                      className="w-10 h-10 rounded-full border-[2.5px] border-white object-cover shadow-sm"
-                    />
-                  ))}
-                </div>
-                <div>
-                  <div className="flex items-center gap-1">
-                    {[...Array(5)].map((_, i) => (
-                      <Star key={i} size={13} className="fill-warning text-warning" />
-                    ))}
-                    <span className="text-sm font-bold text-primary ml-1">4.9</span>
-                  </div>
-                  <p className="text-xs text-muted mt-0.5">Trusted by 1,000+ happy clients</p>
-                </div>
-              </div>
-
               {/* USP Feature Pills */}
-              <div className="mt-8 flex flex-wrap gap-2.5 animate-fade-in-up stagger-3">
+              <div className="mt-10 flex flex-wrap gap-2.5 animate-fade-in-up stagger-3">
                 {[
                   { icon: Bot, text: 'AI Chatbot Search', color: 'text-accent bg-accent/[0.07] border-accent/15' },
                   { icon: Sparkles, text: 'AI Listing Writer', color: 'text-violet-600 bg-violet-500/[0.07] border-violet-500/15' },
@@ -258,11 +233,11 @@ export default function Home() {
               <div className="absolute -right-3 top-12 bg-white rounded-2xl shadow-xl shadow-black/8 p-4 border border-border/50 animate-float" style={{ animationDelay: '1.5s' }}>
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-xl bg-accent/10 flex items-center justify-center">
-                    <TrendingUp size={16} className="text-accent" />
+                    <Shield size={16} className="text-accent" />
                   </div>
                   <div>
-                    <p className="text-sm font-bold text-primary">98%</p>
-                    <p className="text-[11px] text-muted">Satisfaction Rate</p>
+                    <p className="text-sm font-bold text-primary">Verified</p>
+                    <p className="text-[11px] text-muted">Agents only</p>
                   </div>
                 </div>
               </div>
@@ -271,58 +246,155 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Showcase Gallery */}
+      {/* Browse by City — Pakistan bento */}
       <section className="py-20 sm:py-24 bg-white overflow-hidden">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 mb-10">
-          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6">
+          <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-8 sm:mb-10 gap-4">
             <div>
-              <p className="text-xs font-semibold uppercase tracking-wider text-accent mb-2">Gallery</p>
+              <p className="text-xs font-semibold uppercase tracking-wider text-accent mb-2 flex items-center gap-2">
+                <MapIcon size={12} /> By Location
+              </p>
               <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-primary tracking-tight">
-                Explore stunning spaces
+                Explore homes <span className="gradient-text">across Pakistan</span>
               </h2>
               <p className="mt-2 text-muted text-sm sm:text-base max-w-lg">
-                From modern apartments to luxury villas, find a home that matches your lifestyle.
+                Browse verified listings in major cities across Pakistan.
               </p>
             </div>
+            <Link to="/properties" className="hidden sm:inline-flex items-center gap-2 text-sm font-semibold text-accent hover:underline underline-offset-4">
+              All cities <ArrowRight size={14} />
+            </Link>
+          </div>
+
+          <div className="grid grid-cols-2 lg:grid-cols-5 gap-3 sm:gap-4">
+            {/* Lahore — hero tile */}
             <Link
-              to="/properties"
-              className="hidden sm:inline-flex items-center gap-2 text-sm font-semibold text-accent hover:underline underline-offset-4"
+              to="/properties?location=Lahore"
+              className="group relative rounded-2xl overflow-hidden col-span-2 lg:col-span-3 aspect-[4/3] lg:aspect-auto lg:row-span-2 lg:min-h-[420px]"
             >
-              View all <ArrowRight size={14} />
+              <img
+                src={heroExterior}
+                alt="Lahore"
+                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-[1200ms] ease-out"
+                loading="lazy"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent" />
+              <div className="absolute top-5 left-5">
+                <span className="inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider bg-white/15 backdrop-blur-md text-white px-3 py-1.5 rounded-full border border-white/20">
+                  <Flame size={11} /> Most Popular
+                </span>
+              </div>
+              <div className="absolute bottom-6 left-6 right-6 text-white">
+                <p className="text-3xl sm:text-4xl font-bold tracking-tight">Lahore</p>
+                <p className="text-sm opacity-90 mt-2">Houses, apartments & plots in DHA, Bahria, Gulberg</p>
+                <div className="mt-4 inline-flex items-center gap-2 text-sm font-semibold opacity-0 group-hover:opacity-100 transition-opacity">
+                  Browse Lahore <ArrowRight size={14} />
+                </div>
+              </div>
+            </Link>
+
+            {/* Karachi — wide */}
+            <Link
+              to="/properties?location=Karachi"
+              className="group relative rounded-2xl overflow-hidden col-span-2 aspect-[16/9] lg:aspect-auto lg:min-h-[200px]"
+            >
+              <img
+                src={room2}
+                alt="Karachi"
+                className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out"
+                loading="lazy"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/15 to-transparent" />
+              <div className="absolute bottom-4 left-5 right-5 text-white">
+                <p className="text-xl sm:text-2xl font-bold">Karachi</p>
+                <p className="text-xs opacity-80 mt-0.5">Apartments & houses in Clifton, DHA</p>
+              </div>
+            </Link>
+
+            {/* Islamabad */}
+            <Link
+              to="/properties?location=Islamabad"
+              className="group relative rounded-2xl overflow-hidden aspect-square"
+            >
+              <img
+                src={room4}
+                alt="Islamabad"
+                className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out"
+                loading="lazy"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-transparent" />
+              <div className="absolute bottom-3 left-4 right-4 text-white">
+                <p className="text-base sm:text-lg font-bold">Islamabad</p>
+                <p className="text-[11px] opacity-80">F-7, F-10, Bahria</p>
+              </div>
+            </Link>
+
+            {/* Rawalpindi */}
+            <Link
+              to="/properties?location=Rawalpindi"
+              className="group relative rounded-2xl overflow-hidden aspect-square"
+            >
+              <img
+                src={room5}
+                alt="Rawalpindi"
+                className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out"
+                loading="lazy"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-transparent" />
+              <div className="absolute bottom-3 left-4 right-4 text-white">
+                <p className="text-base sm:text-lg font-bold">Rawalpindi</p>
+                <p className="text-[11px] opacity-80">Bahria Town & Saddar</p>
+              </div>
             </Link>
           </div>
         </div>
-        <div className="flex gap-4 px-4 sm:px-6 overflow-x-auto pb-4 scrollbar-hide snap-x snap-mandatory">
-          {[
-            { img: room3, label: 'Luxury Living', tag: 'Featured' },
-            { img: room4, label: 'Modern Design', tag: 'Popular' },
-            { img: room5, label: 'Cozy Spaces', tag: 'New' },
-            { img: room6, label: 'Contemporary', tag: 'Trending' },
-            { img: room1, label: 'Elegant Decor', tag: 'Premium' },
-            { img: room2, label: 'Premium Finish', tag: 'Exclusive' },
-          ].map((item, i) => (
-            <Link
-              to="/properties"
-              key={i}
-              className="flex-shrink-0 group relative w-64 sm:w-72 h-80 rounded-2xl overflow-hidden snap-start"
-            >
-              <img
-                src={item.img}
-                alt={item.label}
-                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
-              <div className="absolute top-4 left-4">
-                <span className="text-[10px] font-semibold uppercase tracking-wider bg-white/20 backdrop-blur-md text-white px-3 py-1 rounded-full">
-                  {item.tag}
-                </span>
-              </div>
-              <div className="absolute bottom-5 left-5 right-5">
-                <p className="text-white font-semibold text-sm">{item.label}</p>
-                <p className="text-white/60 text-xs mt-0.5">Explore collection</p>
-              </div>
-            </Link>
-          ))}
+      </section>
+
+      {/* Browse by Property Type */}
+      <section className="py-20 sm:py-24 bg-surface overflow-hidden">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6">
+          <div className="text-center mb-10 sm:mb-12">
+            <p className="text-xs font-semibold uppercase tracking-wider text-accent mb-2">Categories</p>
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-primary tracking-tight">
+              What kind of space do you want?
+            </h2>
+            <p className="mt-3 text-muted text-sm sm:text-base max-w-md mx-auto">
+              Houses, villas, apartments, plots — pick a category and jump in.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4">
+            {[
+              { name: 'Houses', value: 'House', icon: HomeIcon, img: heroExterior },
+              { name: 'Apartments', value: 'Apartment', icon: Building2, img: room1 },
+              { name: 'Villas', value: 'Villa', icon: Sparkles, img: heroInterior },
+              { name: 'Commercial', value: 'Commercial', icon: Briefcase, img: room6 },
+              { name: 'Plots', value: 'Land', icon: MapIcon, img: room7 },
+            ].map((type) => (
+              <Link
+                key={type.value}
+                to={`/properties?type=${type.value}`}
+                className="group relative rounded-2xl overflow-hidden aspect-[4/5] shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
+              >
+                <img
+                  src={type.img}
+                  alt={type.name}
+                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out"
+                  loading="lazy"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-transparent" />
+                <div className="absolute top-3 right-3 w-9 h-9 rounded-xl bg-white/15 backdrop-blur-md flex items-center justify-center border border-white/20">
+                  <type.icon size={16} className="text-white" />
+                </div>
+                <div className="absolute bottom-4 left-4 right-4 text-white">
+                  <p className="font-bold text-sm sm:text-base leading-tight">{type.name}</p>
+                </div>
+                <div className="absolute inset-x-0 bottom-0 translate-y-full group-hover:translate-y-0 transition-transform duration-300 bg-accent text-white py-2 px-4 flex items-center justify-center gap-1 text-xs font-semibold">
+                  Browse <ArrowRight size={12} />
+                </div>
+              </Link>
+            ))}
+          </div>
         </div>
       </section>
 
@@ -426,24 +498,29 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Stats */}
-      <section className="py-20 mesh-gradient">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6">
-            {[
-              { value: '500+', label: 'Properties Listed', icon: Building2, bg: 'bg-blue-600' },
-              { value: '200+', label: 'Verified Agents', icon: Users, bg: 'bg-emerald-600' },
-              { value: '50+', label: 'Cities Covered', icon: HomeIcon, bg: 'bg-amber-500' },
-              { value: '1000+', label: 'Happy Clients', icon: CheckCircle, bg: 'bg-purple-600' },
-            ].map((stat) => (
-              <div key={stat.label} className="bg-white rounded-2xl p-6 sm:p-8 border border-border/50 text-center hover:shadow-lg hover:shadow-black/[0.04] hover:-translate-y-0.5 transition-all duration-300">
-                <div className={`w-12 h-12 rounded-xl ${stat.bg} flex items-center justify-center mx-auto mb-4 shadow-lg shadow-black/10`}>
-                  <stat.icon size={20} className="text-white" />
-                </div>
-                <p className="text-3xl sm:text-4xl font-bold text-primary tracking-tight">{stat.value}</p>
-                <p className="mt-1.5 text-xs sm:text-sm text-muted">{stat.label}</p>
-              </div>
-            ))}
+      {/* Visual breaker — cinematic */}
+      <section className="relative h-[420px] sm:h-[520px] overflow-hidden">
+        <img
+          src={heroInterior}
+          alt=""
+          className="absolute inset-0 w-full h-full object-cover"
+        />
+        <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/45 to-black/10" />
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 h-full flex items-center">
+          <div className="max-w-xl text-white">
+            <p className="text-xs font-semibold uppercase tracking-wider opacity-75 mb-3">A home for every story</p>
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight leading-[1.1]">
+              Find a place you'll love coming home to.
+            </h2>
+            <p className="mt-5 text-sm sm:text-base opacity-80 max-w-md leading-relaxed">
+              Verified listings across Pakistan — from family homes in DHA to apartments in Clifton.
+            </p>
+            <Link
+              to="/properties"
+              className="mt-8 inline-flex items-center gap-2 bg-white text-primary px-7 py-3 rounded-full text-sm font-semibold hover:bg-white/90 transition-all shadow-lg"
+            >
+              Start browsing <ArrowRight size={14} />
+            </Link>
           </div>
         </div>
       </section>
@@ -639,6 +716,64 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Popular Neighborhoods */}
+      <section className="py-20 sm:py-24 bg-white overflow-hidden">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6">
+          <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-10 sm:mb-12 gap-4">
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-wider text-accent mb-2">Neighborhoods</p>
+              <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-primary tracking-tight">
+                Popular neighborhoods in Pakistan
+              </h2>
+              <p className="mt-2 text-muted text-sm sm:text-base max-w-lg">
+                Explore the most-searched areas across Lahore, Islamabad, and Karachi.
+              </p>
+            </div>
+            <Link to="/properties" className="hidden sm:inline-flex items-center gap-2 text-sm font-semibold text-accent hover:underline underline-offset-4">
+              All neighborhoods <ArrowRight size={14} />
+            </Link>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
+            {[
+              { name: 'DHA Phase 5', city: 'Lahore', img: heroExterior, types: 'Houses · Villas' },
+              { name: 'Bahria Town', city: 'Islamabad', img: room1, types: 'Houses · Apartments' },
+              { name: 'Clifton', city: 'Karachi', img: room2, types: 'Apartments · Houses' },
+              { name: 'F-7', city: 'Islamabad', img: room3, types: 'Houses' },
+              { name: 'Gulberg', city: 'Lahore', img: room4, types: 'Houses · Commercial' },
+              { name: 'DHA Phase 8', city: 'Karachi', img: room6, types: 'Houses · Plots' },
+            ].map((n) => (
+              <Link
+                key={`${n.name}-${n.city}`}
+                to={`/properties?location=${encodeURIComponent(n.name)}`}
+                className="group bg-white rounded-2xl overflow-hidden border border-border/60 hover:shadow-xl hover:shadow-black/[0.06] hover:-translate-y-1 transition-all duration-300"
+              >
+                <div className="relative h-48 overflow-hidden">
+                  <img
+                    src={n.img}
+                    alt={n.name}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
+                    loading="lazy"
+                  />
+                  <div className="absolute top-3 left-3 inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-white/95 backdrop-blur-sm text-[11px] font-semibold text-primary shadow-sm">
+                    <MapPin size={11} className="text-accent" />
+                    {n.city}
+                  </div>
+                </div>
+
+                <div className="p-5">
+                  <div className="flex items-center justify-between gap-2">
+                    <p className="text-lg font-bold text-primary tracking-tight">{n.name}</p>
+                    <ArrowRight size={16} className="text-muted group-hover:text-accent group-hover:translate-x-1 transition-all flex-shrink-0" />
+                  </div>
+                  <p className="text-sm text-muted mt-1">{n.types}</p>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* Features */}
       <section className="py-20 sm:py-24 mesh-gradient">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
@@ -750,7 +885,7 @@ export default function Home() {
                     {t.User?.avatar_url ? (
                       <img src={t.User.avatar_url} alt={t.User.name} className="w-10 h-10 rounded-full object-cover ring-2 ring-surface" />
                     ) : (
-                      <div className="w-10 h-10 rounded-full gradient-accent flex items-center justify-center text-sm font-bold text-white">
+                      <div className="w-10 h-10 rounded-full bg-surface flex items-center justify-center text-sm font-bold text-secondary border border-border/60">
                         {t.User?.name?.charAt(0)?.toUpperCase() || '?'}
                       </div>
                     )}

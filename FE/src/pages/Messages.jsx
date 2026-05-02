@@ -61,10 +61,10 @@ export default function Messages() {
             >
               <ArrowLeft size={16} />
             </button>
-            <div className="w-8 h-8 rounded-lg gradient-accent flex items-center justify-center">
-              <MessageSquare size={14} className="text-white" />
-            </div>
-            <h1 className="text-lg font-bold text-primary tracking-tight">Messages</h1>
+            <h1 className="text-lg font-bold text-primary tracking-tight flex items-center gap-2">
+              <MessageSquare size={18} className="text-accent" />
+              Messages
+            </h1>
           </div>
         </div>
         <ConversationList

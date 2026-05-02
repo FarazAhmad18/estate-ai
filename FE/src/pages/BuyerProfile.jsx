@@ -106,23 +106,22 @@ export default function BuyerProfile() {
   const userInitial = user?.name?.charAt(0)?.toUpperCase() || '?';
 
   return (
-    <div className="min-h-screen pt-24 pb-16 mesh-gradient">
+    <div className="min-h-screen pt-24 pb-16 bg-surface">
       <div className="max-w-3xl mx-auto px-4 sm:px-6">
         <div className="mb-8 animate-fade-in-up">
-          <p className="text-xs font-semibold uppercase tracking-wider text-accent mb-2">Account</p>
-          <h1 className="text-2xl sm:text-3xl font-bold text-primary tracking-tight">My Profile</h1>
-          <p className="mt-1 text-sm text-muted">Manage your account details and preferences.</p>
+          <h1 className="text-2xl sm:text-3xl font-bold text-primary tracking-tight">Account settings</h1>
+          <p className="mt-1 text-sm text-muted">Manage your profile, password, and account preferences.</p>
         </div>
 
         {/* Profile Card */}
         <div className="bg-white rounded-2xl p-6 sm:p-8 mb-6 border border-border/50 shadow-sm animate-fade-in-up stagger-1">
           <div className="flex items-center gap-5 sm:gap-6">
             <div className="relative flex-shrink-0">
-              <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-full gradient-accent flex items-center justify-center overflow-hidden ring-4 ring-white shadow-lg">
+              <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl bg-surface flex items-center justify-center overflow-hidden border border-border/60 shadow-sm">
                 {user?.avatar_url ? (
                   <img src={user.avatar_url} alt="" className="w-full h-full object-cover" />
                 ) : (
-                  <span className="text-2xl sm:text-3xl font-bold text-white">{userInitial}</span>
+                  <span className="text-2xl sm:text-3xl font-bold text-secondary">{userInitial}</span>
                 )}
               </div>
               <label className="absolute -bottom-1 -right-1 w-9 h-9 bg-white text-primary rounded-full flex items-center justify-center cursor-pointer hover:bg-surface transition-colors shadow-lg border border-border/50">

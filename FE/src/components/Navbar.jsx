@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useMessages } from '../context/MessageContext';
-import { Menu, X, User, LogOut, LayoutDashboard, ChevronDown, Heart, Shield, MessageSquare, Home, Building2, Sparkles } from 'lucide-react';
+import { User, LogOut, LayoutDashboard, ChevronDown, Heart, Shield, MessageSquare, Home, Building2 } from 'lucide-react';
 import toast from 'react-hot-toast';
 
 export default function Navbar() {
@@ -79,8 +79,8 @@ export default function Navbar() {
           <div className="flex items-center justify-between h-16">
             {/* Logo */}
             <Link to="/" className="flex items-center gap-2 group">
-              <div className="w-8 h-8 rounded-lg gradient-accent flex items-center justify-center shadow-sm">
-                <Sparkles size={14} className="text-white" />
+              <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center shadow-sm">
+                <Building2 size={15} className="text-white" strokeWidth={2.25} />
               </div>
               <span className="text-lg font-bold tracking-tight text-primary">
                 Estate<span className="text-accent">AI</span>
@@ -128,11 +128,11 @@ export default function Navbar() {
                       dropdownOpen ? 'bg-surface-2' : 'hover:bg-surface'
                     }`}
                   >
-                    <div className="w-8 h-8 rounded-full gradient-accent flex items-center justify-center overflow-hidden ring-2 ring-white shadow-sm">
+                    <div className="w-8 h-8 rounded-full bg-surface-2 flex items-center justify-center overflow-hidden border border-border/60">
                       {user.avatar_url ? (
                         <img src={user.avatar_url} alt="" className="w-full h-full object-cover" />
                       ) : (
-                        <span className="text-xs font-bold text-white">{userInitial}</span>
+                        <span className="text-xs font-bold text-secondary">{userInitial}</span>
                       )}
                     </div>
                     <span className="text-sm font-medium text-secondary">{user.name?.split(' ')[0]}</span>
@@ -293,11 +293,11 @@ export default function Navbar() {
             <>
               {/* User profile card - at top */}
               <div className="flex items-center gap-3 px-3 py-3 mb-3 bg-surface rounded-2xl">
-                <div className="w-11 h-11 rounded-full gradient-accent flex items-center justify-center overflow-hidden ring-2 ring-white shadow-sm">
+                <div className="w-11 h-11 rounded-full bg-surface-2 flex items-center justify-center overflow-hidden border border-border/60">
                   {user.avatar_url ? (
                     <img src={user.avatar_url} alt="" className="w-full h-full object-cover" />
                   ) : (
-                    <span className="text-sm font-bold text-white">{userInitial}</span>
+                    <span className="text-sm font-bold text-secondary">{userInitial}</span>
                   )}
                 </div>
                 <div className="min-w-0 flex-1">

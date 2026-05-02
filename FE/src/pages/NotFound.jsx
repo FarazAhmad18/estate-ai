@@ -3,12 +3,12 @@ import { Home, Search, ArrowLeft } from 'lucide-react';
 
 export default function NotFound() {
   return (
-    <div className="min-h-screen flex items-center justify-center px-4 mesh-gradient">
+    <div className="min-h-screen flex items-center justify-center px-4 bg-surface">
       <div className="text-center animate-fade-in-up max-w-md">
-        <div className="text-8xl font-bold text-accent/10 mb-2 tracking-tighter">404</div>
-        <h1 className="text-2xl sm:text-3xl font-bold text-primary tracking-tight">Page not found</h1>
+        <div className="text-[8rem] sm:text-[10rem] font-bold text-primary/[0.06] leading-none mb-2 tracking-tighter">404</div>
+        <h1 className="text-2xl sm:text-3xl font-bold text-primary tracking-tight">This listing has moved.</h1>
         <p className="mt-3 text-sm text-muted leading-relaxed">
-          The page you're looking for doesn't exist or has been moved. Let's get you back on track.
+          The page you're looking for doesn't exist or has been removed. Let's get you back to browsing.
         </p>
         <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3">
           <Link

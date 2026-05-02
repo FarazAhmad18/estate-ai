@@ -6,7 +6,7 @@ export default function ProtectedRoute({ children, role }) {
 
   if (loading) {
     return (
-      <div className="min-h-screen pt-24 pb-16 mesh-gradient">
+      <div className="min-h-screen pt-24 pb-16 bg-surface">
         <div className="max-w-6xl mx-auto px-4 sm:px-6">
           <div className="space-y-6">
             <div className="flex items-center gap-3">

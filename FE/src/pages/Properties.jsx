@@ -21,7 +21,7 @@ const SORT_OPTIONS = [
 export default function Properties() {
   const { user } = useAuth();
   const navigate = useNavigate();
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
   const [properties, setProperties] = useState([]);
   const [loading, setLoading] = useState(true);
   const [totalPages, setTotalPages] = useState(1);
@@ -145,17 +145,26 @@ export default function Properties() {
 
   return (
     <div className="min-h-screen pb-16">
-      {/* ── Page Header with Mesh Gradient ── */}
-      <div className="mesh-gradient pt-28 pb-12 md:pt-32 md:pb-16">
-        <div className="max-w-7xl mx-auto px-6 animate-fade-in-up">
-          <span className="inline-block gradient-accent text-white text-xs font-semibold tracking-wider uppercase px-3 py-1 rounded-full mb-4">
-            Browse Properties
-          </span>
-          <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-primary tracking-tight">
-            Find Your Perfect Property
+      {/* ── Page Header ── */}
+      <div className="bg-surface pt-24 pb-8 sm:pt-28 sm:pb-10 border-b border-border/60">
+        <div className="max-w-7xl mx-auto px-6">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-primary tracking-tight">
+            {filters.location
+              ? `Properties in ${filters.location}`
+              : filters.type !== 'All' && filters.purpose !== 'All'
+                ? `${filters.type}s for ${filters.purpose}`
+                : filters.type !== 'All'
+                  ? `${filters.type}s in Pakistan`
+                  : filters.purpose !== 'All'
+                    ? `Properties for ${filters.purpose}`
+                    : 'All properties'}
           </h1>
-          <p className="mt-3 text-muted text-base md:text-lg max-w-xl">
-            Explore {totalCount.toLocaleString()} listings across top locations. Filter, compare, and save the ones you love.
+          <p className="mt-2 text-sm sm:text-base text-muted">
+            {loading
+              ? 'Searching listings…'
+              : totalCount > 0
+                ? <><span className="font-semibold text-secondary">{totalCount.toLocaleString()}</span> {totalCount === 1 ? 'listing' : 'listings'} available</>
+                : 'Browse verified listings across Pakistan'}
           </p>
         </div>
       </div>
@@ -318,35 +327,59 @@ export default function Properties() {
 
               {/* Price Range */}
               <div>
-                <label className="block text-xs font-semibold text-secondary uppercase tracking-wider mb-3">Price Range</label>
+                <label className="block text-xs font-semibold text-secondary uppercase tracking-wider mb-3">Price Range (PKR)</label>
                 <div className="flex gap-2">
-                  <input
-                    type="number"
-                    placeholder="Min"
-                    value={filters.minPrice}
-                    onChange={(e) => updateFilter('minPrice', e.target.value)}
-                    className="w-full px-3 py-2.5 bg-surface rounded-xl text-sm border border-border/60 focus:border-accent focus:ring-2 focus:ring-accent/10 transition-all placeholder:text-muted/50"
-                  />
-                  <input
-                    type="number"
-                    placeholder="Max"
-                    value={filters.maxPrice}
-                    onChange={(e) => updateFilter('maxPrice', e.target.value)}
-                    className="w-full px-3 py-2.5 bg-surface rounded-xl text-sm border border-border/60 focus:border-accent focus:ring-2 focus:ring-accent/10 transition-all placeholder:text-muted/50"
-                  />
+                  <div className="relative flex-1">
+                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[11px] text-muted font-semibold pointer-events-none">PKR</span>
+                    <input
+                      type="number"
+                      placeholder="Min"
+                      value={filters.minPrice}
+                      onChange={(e) => updateFilter('minPrice', e.target.value)}
+                      className="w-full pl-12 pr-3 py-2.5 bg-surface rounded-xl text-sm border border-border/60 focus:border-accent focus:ring-2 focus:ring-accent/10 transition-all placeholder:text-muted/50"
+                    />
+                  </div>
+                  <div className="relative flex-1">
+                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[11px] text-muted font-semibold pointer-events-none">PKR</span>
+                    <input
+                      type="number"
+                      placeholder="Max"
+                      value={filters.maxPrice}
+                      onChange={(e) => updateFilter('maxPrice', e.target.value)}
+                      className="w-full pl-12 pr-3 py-2.5 bg-surface rounded-xl text-sm border border-border/60 focus:border-accent focus:ring-2 focus:ring-accent/10 transition-all placeholder:text-muted/50"
+                    />
+                  </div>
                 </div>
               </div>
 
               {/* Bedrooms */}
               <div>
                 <label className="block text-xs font-semibold text-secondary uppercase tracking-wider mb-3">Bedrooms</label>
-                <input
-                  type="number"
-                  placeholder="Any"
-                  value={filters.bedrooms}
-                  onChange={(e) => updateFilter('bedrooms', e.target.value)}
-                  className="w-full px-3 py-2.5 bg-surface rounded-xl text-sm border border-border/60 focus:border-accent focus:ring-2 focus:ring-accent/10 transition-all placeholder:text-muted/50"
-                />
+                <div className="flex gap-1.5">
+                  {[
+                    { label: 'Any', value: '' },
+                    { label: '1+', value: '1' },
+                    { label: '2+', value: '2' },
+                    { label: '3+', value: '3' },
+                    { label: '4+', value: '4' },
+                    { label: '5+', value: '5' },
+                  ].map((b) => {
+                    const active = filters.bedrooms === b.value;
+                    return (
+                      <button
+                        key={b.label}
+                        onClick={() => updateFilter('bedrooms', b.value)}
+                        className={`flex-1 px-2 py-2 rounded-lg text-xs font-semibold transition-all ${
+                          active
+                            ? 'btn-primary rounded-lg'
+                            : 'bg-surface text-secondary border border-border/60 hover:border-accent hover:text-accent'
+                        }`}
+                      >
+                        {b.label}
+                      </button>
+                    );
+                  })}
+                </div>
               </div>
             </div>
 

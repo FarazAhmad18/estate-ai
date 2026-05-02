@@ -2,7 +2,8 @@ import { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import {
   MapPin, BedDouble, Maximize, Building2, Tag, Phone, Mail, User,
-  ChevronLeft, ChevronRight, ArrowLeft, Heart, Star, Trash2, MessageSquare
+  ChevronLeft, ChevronRight, ArrowLeft, Heart, Star, Trash2, MessageSquare,
+  Share2, Calendar, Hash
 } from 'lucide-react';
 import toast from 'react-hot-toast';
 import api from '../lib/api';
@@ -190,6 +191,21 @@ export default function PropertyDetail() {
     }
   };
 
+  const handleShare = async () => {
+    const url = window.location.href;
+    const title = property ? `${property.type} for ${property.purpose} in ${property.location}` : 'Property on EstateAI';
+    try {
+      if (navigator.share) {
+        await navigator.share({ title, url });
+      } else {
+        await navigator.clipboard.writeText(url);
+        toast.success('Link copied to clipboard');
+      }
+    } catch {
+      // user dismissed share dialog or clipboard blocked — silent fail
+    }
+  };
+
   const handleContactAgent = async () => {
     if (!user) return navigate('/login');
     if (contactingAgent) return;
@@ -247,8 +263,28 @@ export default function PropertyDetail() {
     return price.toLocaleString();
   };
 
+  const formatRelativeDate = (date) => {
+    if (!date) return null;
+    const days = Math.floor((Date.now() - new Date(date).getTime()) / 86400000);
+    if (days <= 0) return 'Listed today';
+    if (days === 1) return 'Listed yesterday';
+    if (days < 7) return `Listed ${days} days ago`;
+    if (days < 30) {
+      const w = Math.floor(days / 7);
+      return `Listed ${w} ${w === 1 ? 'week' : 'weeks'} ago`;
+    }
+    if (days < 365) {
+      const m = Math.floor(days / 30);
+      return `Listed ${m} ${m === 1 ? 'month' : 'months'} ago`;
+    }
+    const y = Math.floor(days / 365);
+    return `Listed ${y} ${y === 1 ? 'year' : 'years'} ago`;
+  };
+
   const agent = property.User;
   const isOwner = user?.role === 'Agent' && user?.id === property.agent_id;
+  const pricePerSqft = property.area ? Math.round(property.price / property.area) : null;
+  const listedLabel = formatRelativeDate(property.createdAt);
 
   return (
     <div className="min-h-screen pt-20 pb-16">
@@ -292,20 +328,30 @@ export default function PropertyDetail() {
                     {currentImg + 1} / {images.length}
                   </div>
 
-                  {/* Favorite button on image */}
-                  <button
-                    onClick={handleToggleFavorite}
-                    className={`absolute top-4 right-4 w-10 h-10 rounded-full flex items-center justify-center transition-all ${
-                      isFavorited
-                        ? 'bg-red-500 text-white shadow-lg shadow-red-500/30'
-                        : 'glass text-secondary hover:text-red-500'
-                    }`}
-                  >
-                    <Heart
-                      size={18}
-                      className={isFavorited ? 'fill-white text-white' : ''}
-                    />
-                  </button>
+                  {/* Action buttons on image */}
+                  <div className="absolute top-4 right-4 flex items-center gap-2">
+                    <button
+                      onClick={handleShare}
+                      className="w-10 h-10 rounded-full flex items-center justify-center transition-all glass text-secondary hover:text-accent"
+                      title="Share this listing"
+                    >
+                      <Share2 size={17} />
+                    </button>
+                    <button
+                      onClick={handleToggleFavorite}
+                      className={`w-10 h-10 rounded-full flex items-center justify-center transition-all ${
+                        isFavorited
+                          ? 'bg-red-500 text-white shadow-lg shadow-red-500/30'
+                          : 'glass text-secondary hover:text-red-500'
+                      }`}
+                      title={isFavorited ? 'Saved' : 'Save'}
+                    >
+                      <Heart
+                        size={18}
+                        className={isFavorited ? 'fill-white text-white' : ''}
+                      />
+                    </button>
+                  </div>
 
                   {images.length > 1 && (
                     <>
@@ -369,8 +415,22 @@ export default function PropertyDetail() {
 
             {/* ── Property Info ── */}
             <div className="animate-fade-in-up stagger-1">
+              {/* Listing meta */}
+              <div className="flex items-center flex-wrap gap-x-4 gap-y-1 text-xs text-muted mb-3">
+                {listedLabel && (
+                  <span className="inline-flex items-center gap-1.5">
+                    <Calendar size={12} />
+                    {listedLabel}
+                  </span>
+                )}
+                <span className="inline-flex items-center gap-1.5">
+                  <Hash size={12} />
+                  Ref: <span className="font-mono font-semibold text-secondary">EA-{String(property.id).padStart(5, '0')}</span>
+                </span>
+              </div>
+
               {/* Tags */}
-              <div className="flex items-center gap-2 mb-4 flex-wrap">
+              <div className="flex items-center gap-2 mb-5 flex-wrap">
                 <span className="text-xs font-semibold bg-surface px-3 py-1.5 rounded-full text-secondary border border-border/60">
                   {property.type}
                 </span>
@@ -384,53 +444,111 @@ export default function PropertyDetail() {
               </div>
 
               {/* Price */}
-              <div className="flex items-start gap-3 mb-3">
-                <div className="w-1.5 h-10 rounded-full gradient-accent flex-shrink-0 mt-1" />
-                <h1 className="text-3xl md:text-4xl font-bold text-primary tracking-tight">
-                  PKR {formatPrice(property.price)}
-                  {property.purpose === 'Rent' && (
-                    <span className="text-base md:text-lg font-normal text-muted"> /month</span>
-                  )}
-                </h1>
-              </div>
+              <h1 className="text-3xl md:text-4xl font-bold text-primary tracking-tight">
+                PKR {formatPrice(property.price)}
+                {property.purpose === 'Rent' && (
+                  <span className="text-base md:text-lg font-normal text-muted"> /month</span>
+                )}
+              </h1>
+              {pricePerSqft && (
+                <p className="mt-1.5 text-sm text-muted">
+                  PKR {pricePerSqft.toLocaleString()} <span className="text-xs">per sq ft</span>
+                </p>
+              )}
 
               {/* Location */}
-              <div className="flex items-center gap-2 text-muted ml-4">
+              <div className="flex items-center gap-2 text-secondary mt-4">
                 <MapPin size={16} className="text-accent flex-shrink-0" />
                 <span className="text-sm">{property.location}</span>
               </div>
             </div>
 
-            {/* ── Spec Cards ── */}
-            <div className="animate-fade-in-up stagger-2 flex gap-3 overflow-x-auto pb-2 scrollbar-hide sm:grid sm:grid-cols-4 sm:overflow-visible">
-              {[
-                { icon: Building2, label: 'Type', value: property.type },
-                { icon: Tag, label: 'Purpose', value: `For ${property.purpose}` },
-                { icon: BedDouble, label: 'Bedrooms', value: property.bedrooms || 'N/A' },
-                { icon: Maximize, label: 'Area', value: `${property.area?.toLocaleString()} sq ft` },
-              ].map((spec) => (
-                <div
-                  key={spec.label}
-                  className="flex-shrink-0 w-36 sm:w-auto card-elevated rounded-2xl p-4 hover:border-accent/20"
-                >
-                  <div className="w-9 h-9 rounded-xl bg-accent/10 flex items-center justify-center mb-3">
-                    <spec.icon size={16} className="text-accent" />
+            {/* ── Spec Strip ── */}
+            <div className="animate-fade-in-up stagger-2 card-elevated rounded-2xl px-5 py-4 sm:px-6 sm:py-5">
+              <div className="flex flex-wrap items-center gap-x-6 gap-y-3 sm:gap-x-8">
+                {property.bedrooms != null && property.bedrooms !== '' && (
+                  <div className="flex items-center gap-2.5">
+                    <BedDouble size={18} className="text-accent" />
+                    <div>
+                      <p className="text-sm font-semibold text-primary leading-tight">{property.bedrooms}</p>
+                      <p className="text-[11px] text-muted leading-tight">{property.bedrooms === 1 ? 'Bedroom' : 'Bedrooms'}</p>
+                    </div>
                   </div>
-                  <p className="text-xs text-muted">{spec.label}</p>
-                  <p className="text-sm font-semibold text-primary mt-0.5">{spec.value}</p>
+                )}
+                {property.area && (
+                  <div className="flex items-center gap-2.5">
+                    <Maximize size={18} className="text-accent" />
+                    <div>
+                      <p className="text-sm font-semibold text-primary leading-tight">{property.area.toLocaleString()}</p>
+                      <p className="text-[11px] text-muted leading-tight">sq ft</p>
+                    </div>
+                  </div>
+                )}
+                <div className="flex items-center gap-2.5">
+                  <Building2 size={18} className="text-accent" />
+                  <div>
+                    <p className="text-sm font-semibold text-primary leading-tight">{property.type}</p>
+                    <p className="text-[11px] text-muted leading-tight">Type</p>
+                  </div>
                 </div>
-              ))}
+                <div className="flex items-center gap-2.5">
+                  <Tag size={18} className="text-accent" />
+                  <div>
+                    <p className="text-sm font-semibold text-primary leading-tight">For {property.purpose}</p>
+                    <p className="text-[11px] text-muted leading-tight">Purpose</p>
+                  </div>
+                </div>
+              </div>
             </div>
 
             {/* ── Description ── */}
             <div className="animate-fade-in-up stagger-3">
               <h2 className="text-lg font-semibold text-primary mb-3">Description</h2>
               <div className="card-elevated rounded-2xl p-5">
-                <p className="text-sm text-muted leading-relaxed whitespace-pre-line">
-                  {property.description}
-                </p>
+                {property.description ? (
+                  <p className="text-sm text-secondary leading-relaxed whitespace-pre-line">
+                    {property.description}
+                  </p>
+                ) : (
+                  <p className="text-sm text-muted italic">No description provided by the agent.</p>
+                )}
               </div>
             </div>
+
+            {/* ── Location / Map ── */}
+            {property.location && (
+              <div className="animate-fade-in-up stagger-3">
+                <div className="flex items-center justify-between mb-3">
+                  <h2 className="text-lg font-semibold text-primary flex items-center gap-2">
+                    <MapPin size={18} className="text-accent" />
+                    Location
+                  </h2>
+                  <a
+                    href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(property.location + ', Pakistan')}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-xs font-semibold text-accent hover:underline underline-offset-4 flex items-center gap-1"
+                  >
+                    Open in Google Maps <ChevronRight size={12} />
+                  </a>
+                </div>
+                <div className="card-elevated rounded-2xl overflow-hidden">
+                  <div className="px-5 py-3 border-b border-border/60 flex items-center gap-2 text-sm text-secondary">
+                    <MapPin size={14} className="text-accent flex-shrink-0" />
+                    <span className="truncate">{property.location}</span>
+                  </div>
+                  <div className="aspect-[16/9] sm:aspect-[16/8] bg-surface">
+                    <iframe
+                      title="Property location"
+                      src={`https://www.google.com/maps?q=${encodeURIComponent(property.location + ', Pakistan')}&output=embed`}
+                      className="w-full h-full border-0"
+                      loading="lazy"
+                      referrerPolicy="no-referrer-when-downgrade"
+                    />
+                  </div>
+                </div>
+              </div>
+            )}
 
             {/* ── Agent Reviews Section ── */}
             {agent && (
@@ -597,85 +715,77 @@ export default function PropertyDetail() {
             {/* Agent Card */}
             {agent && (
               <div className="card-elevated rounded-2xl overflow-hidden sticky top-24 animate-fade-in-up stagger-2">
-                {/* Gradient header */}
-                <div className="gradient-accent h-20 relative">
-                  <div className="absolute -bottom-8 left-6">
-                    <Link to={`/agents/${agent.id}`}>
-                      <div className="w-16 h-16 rounded-2xl bg-white flex items-center justify-center overflow-hidden shadow-lg border-4 border-white">
+                <div className="p-6">
+                  <p className="text-[11px] font-semibold uppercase tracking-wider text-muted mb-4">Listing Agent</p>
+
+                  <div className="flex items-start gap-4">
+                    <Link to={`/agents/${agent.id}`} className="flex-shrink-0">
+                      <div className="w-14 h-14 rounded-xl bg-surface flex items-center justify-center overflow-hidden border border-border/60">
                         {agent.avatar_url ? (
-                          <img src={agent.avatar_url} alt="" className="w-full h-full object-cover" />
+                          <img src={agent.avatar_url} alt={agent.name} className="w-full h-full object-cover" />
                         ) : (
-                          <User size={24} className="text-muted" />
+                          <User size={22} className="text-muted" />
                         )}
                       </div>
                     </Link>
+
+                    <div className="flex-1 min-w-0">
+                      <Link to={`/agents/${agent.id}`} className="group">
+                        <p className="font-semibold text-primary text-base leading-tight group-hover:text-accent transition-colors truncate">
+                          {agent.name}
+                        </p>
+                      </Link>
+                      {agentStats && agentStats.totalReviews > 0 ? (
+                        <div className="flex items-center gap-1.5 mt-1.5">
+                          <Star size={13} className="fill-amber-400 text-amber-400" />
+                          <span className="text-sm font-semibold text-primary">{agentStats.avgRating}</span>
+                          <span className="text-xs text-muted">
+                            ({agentStats.totalReviews} {agentStats.totalReviews === 1 ? 'review' : 'reviews'})
+                          </span>
+                        </div>
+                      ) : (
+                        <p className="text-xs text-muted mt-1">No reviews yet</p>
+                      )}
+                    </div>
                   </div>
-                </div>
 
-                <div className="pt-12 px-6 pb-6">
-                  <Link to={`/agents/${agent.id}`} className="group">
-                    <p className="font-semibold text-primary text-lg group-hover:text-accent transition-colors">
-                      {agent.name}
-                    </p>
-                    <p className="text-xs text-accent font-medium">View Profile</p>
-                  </Link>
-
-                  {agentStats && (
-                    <div className="flex items-center gap-2 mt-3">
-                      <div className="flex items-center gap-0.5">
-                        {[1, 2, 3, 4, 5].map((s) => (
-                          <Star
-                            key={s}
-                            size={14}
-                            className={s <= Math.round(agentStats.avgRating) ? 'fill-amber-400 text-amber-400' : 'text-gray-200'}
-                          />
-                        ))}
-                      </div>
-                      <span className="text-sm font-semibold text-primary">{agentStats.avgRating || '0'}</span>
-                      <span className="text-xs text-muted">({agentStats.totalReviews} {agentStats.totalReviews === 1 ? 'review' : 'reviews'})</span>
+                  {(agent.email || agent.phone) && (
+                    <div className="mt-5 pt-5 border-t border-border/60 space-y-2.5">
+                      {agent.email && (
+                        <a href={`mailto:${agent.email}`} className="flex items-center gap-2.5 text-sm text-secondary hover:text-accent transition-colors group">
+                          <Mail size={14} className="text-muted group-hover:text-accent transition-colors flex-shrink-0" />
+                          <span className="truncate">{agent.email}</span>
+                        </a>
+                      )}
+                      {agent.phone && (
+                        <a href={`tel:${agent.phone}`} className="flex items-center gap-2.5 text-sm text-secondary hover:text-accent transition-colors group">
+                          <Phone size={14} className="text-muted group-hover:text-accent transition-colors flex-shrink-0" />
+                          <span>{agent.phone}</span>
+                        </a>
+                      )}
                     </div>
                   )}
 
-                  {/* Divider */}
-                  <div className="border-t border-border/60 my-5" />
-
-                  <div className="space-y-3">
-                    {agent.email && (
-                      <a href={`mailto:${agent.email}`} className="flex items-center gap-3 text-sm text-secondary hover:text-accent transition-colors group">
-                        <div className="w-8 h-8 rounded-lg bg-surface flex items-center justify-center group-hover:bg-accent/10 transition-colors">
-                          <Mail size={14} className="text-muted group-hover:text-accent transition-colors" />
-                        </div>
-                        <span className="truncate">{agent.email}</span>
-                      </a>
-                    )}
-                    {agent.phone && (
-                      <a href={`tel:${agent.phone}`} className="flex items-center gap-3 text-sm text-secondary hover:text-accent transition-colors group">
-                        <div className="w-8 h-8 rounded-lg bg-surface flex items-center justify-center group-hover:bg-accent/10 transition-colors">
-                          <Phone size={14} className="text-muted group-hover:text-accent transition-colors" />
-                        </div>
-                        {agent.phone}
-                      </a>
-                    )}
-                  </div>
-
                   {!isOwner && (
-                    <button
-                      onClick={handleContactAgent}
-                      disabled={contactingAgent}
-                      className="mt-6 w-full btn-primary py-3.5 rounded-xl text-sm font-semibold disabled:opacity-50 flex items-center justify-center gap-2 cursor-pointer"
-                    >
-                      <MessageSquare size={16} />
-                      {contactingAgent ? 'Opening chat...' : 'Contact Agent'}
-                    </button>
-                  )}
-
-                  {agent.phone && (
-                    <a
-                      href={`tel:${agent.phone}`}
-                      className="mt-3 block w-full text-primary text-center py-3 rounded-xl text-sm font-semibold border border-border/60 bg-white hover:bg-surface hover:border-accent/30 transition-all"
-                    >
-                      Call Now
-                    </a>
+                    <div className="mt-5 space-y-2.5">
+                      <button
+                        onClick={handleContactAgent}
+                        disabled={contactingAgent}
+                        className="w-full btn-primary py-3 rounded-xl text-sm font-semibold disabled:opacity-50 flex items-center justify-center gap-2 cursor-pointer"
+                      >
+                        <MessageSquare size={15} />
+                        {contactingAgent ? 'Opening chat...' : 'Message Agent'}
+                      </button>
+                      {agent.phone && (
+                        <a
+                          href={`tel:${agent.phone}`}
+                          className="w-full text-primary text-center py-3 rounded-xl text-sm font-semibold border border-border/60 bg-white hover:border-accent/40 hover:bg-surface transition-all flex items-center justify-center gap-2"
+                        >
+                          <Phone size={14} />
+                          Call Now
+                        </a>
+                      )}
+                    </div>
                   )}
                 </div>
               </div>

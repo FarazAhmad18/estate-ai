@@ -156,14 +156,15 @@ export default function Dashboard() {
   };
 
   return (
-    <div className="min-h-screen pt-24 pb-16 mesh-gradient">
+    <div className="min-h-screen pt-24 pb-16 bg-surface">
       <div className="max-w-6xl mx-auto px-4 sm:px-6">
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-8 gap-4 animate-fade-in-up">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-wider text-accent mb-2">Agent Portal</p>
-            <h1 className="text-2xl sm:text-3xl font-bold text-primary tracking-tight">Dashboard</h1>
-            <p className="mt-1 text-sm text-muted">Welcome back, {user?.name?.split(' ')[0]}</p>
+            <h1 className="text-2xl sm:text-3xl font-bold text-primary tracking-tight">
+              Welcome back{user?.name ? `, ${user.name.split(' ')[0]}` : ''}
+            </h1>
+            <p className="mt-1 text-sm text-muted">Manage your listings, reviews, and profile.</p>
           </div>
           <Link
             to="/properties/create"
@@ -381,11 +382,11 @@ export default function Dashboard() {
                   <div key={review.id} className="bg-white rounded-2xl border border-border/50 p-6 hover:shadow-md hover:shadow-black/[0.03] transition-all duration-200">
                     <div className="flex items-start justify-between">
                       <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-full gradient-accent flex items-center justify-center overflow-hidden">
+                        <div className="w-10 h-10 rounded-full bg-surface flex items-center justify-center overflow-hidden border border-border/60">
                           {review.Reviewer?.avatar_url ? (
                             <img src={review.Reviewer.avatar_url} alt="" className="w-full h-full object-cover" />
                           ) : (
-                            <span className="text-xs font-bold text-white">{review.Reviewer?.name?.charAt(0)?.toUpperCase() || '?'}</span>
+                            <span className="text-xs font-bold text-secondary">{review.Reviewer?.name?.charAt(0)?.toUpperCase() || '?'}</span>
                           )}
                         </div>
                         <div>
@@ -431,11 +432,11 @@ export default function Dashboard() {
             {/* Avatar */}
             <div className="flex items-center gap-5 mb-8 bg-white rounded-2xl border border-border/50 p-6">
               <div className="relative">
-                <div className="w-20 h-20 rounded-full gradient-accent flex items-center justify-center overflow-hidden ring-4 ring-white shadow-lg">
+                <div className="w-20 h-20 rounded-2xl bg-surface flex items-center justify-center overflow-hidden border border-border/60 shadow-sm">
                   {user?.avatar_url ? (
                     <img src={user.avatar_url} alt="" className="w-full h-full object-cover" />
                   ) : (
-                    <span className="text-xl font-bold text-white">{user?.name?.charAt(0)?.toUpperCase() || '?'}</span>
+                    <span className="text-xl font-bold text-secondary">{user?.name?.charAt(0)?.toUpperCase() || '?'}</span>
                   )}
                 </div>
                 <label className="absolute -bottom-1 -right-1 w-8 h-8 bg-white text-primary rounded-full flex items-center justify-center cursor-pointer hover:bg-surface transition-colors shadow-lg border border-border/50">

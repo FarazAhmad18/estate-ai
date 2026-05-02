@@ -135,7 +135,7 @@ export default function EditProperty() {
   };
 
   if (loading) return (
-    <div className="min-h-screen pt-24 pb-16 mesh-gradient">
+    <div className="min-h-screen pt-24 pb-16 bg-surface">
       <div className="max-w-2xl mx-auto px-4 sm:px-6">
         <div className="space-y-3 mb-8">
           <div className="h-4 w-24 skeleton rounded-lg" />
@@ -151,7 +151,7 @@ export default function EditProperty() {
   );
 
   return (
-    <div className="min-h-screen pt-24 pb-16 mesh-gradient">
+    <div className="min-h-screen pt-24 pb-16 bg-surface">
       <div className="max-w-2xl mx-auto px-4 sm:px-6 animate-fade-in-up">
         <button
           onClick={() => navigate(-1)}
@@ -161,9 +161,8 @@ export default function EditProperty() {
         </button>
 
         <div className="mb-8">
-          <p className="text-xs font-semibold uppercase tracking-wider text-accent mb-2">Edit Listing</p>
-          <h1 className="text-2xl sm:text-3xl font-bold text-primary tracking-tight">Edit Property</h1>
-          <p className="mt-1 text-sm text-muted">Update your listing details.</p>
+          <h1 className="text-2xl sm:text-3xl font-bold text-primary tracking-tight">Edit listing</h1>
+          <p className="mt-1 text-sm text-muted">Update your property details and photos.</p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-8">

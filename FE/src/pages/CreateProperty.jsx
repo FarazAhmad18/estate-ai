@@ -102,7 +102,7 @@ export default function CreateProperty() {
   };
 
   return (
-    <div className="min-h-screen pt-24 pb-16 mesh-gradient">
+    <div className="min-h-screen pt-24 pb-16 bg-surface">
       <div className="max-w-2xl mx-auto px-4 sm:px-6 animate-fade-in-up">
         <button
           onClick={() => navigate(-1)}
@@ -112,9 +112,8 @@ export default function CreateProperty() {
         </button>
 
         <div className="mb-8">
-          <p className="text-xs font-semibold uppercase tracking-wider text-accent mb-2">New Listing</p>
-          <h1 className="text-2xl sm:text-3xl font-bold text-primary tracking-tight">Create Listing</h1>
-          <p className="mt-1 text-sm text-muted">Add a new property to your portfolio.</p>
+          <h1 className="text-2xl sm:text-3xl font-bold text-primary tracking-tight">Add a new listing</h1>
+          <p className="mt-1 text-sm text-muted">Photos, details, and a description — that's all it takes.</p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-8">

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Eye, EyeOff, Mail, Lock, ArrowRight, Sparkles, Check } from 'lucide-react';
+import { Eye, EyeOff, Mail, Lock, ArrowRight, Building2, Check } from 'lucide-react';
 import { GoogleLogin } from '@react-oauth/google';
 import { useAuth } from '../context/AuthContext';
 import toast from 'react-hot-toast';
@@ -57,14 +57,14 @@ export default function Login() {
 
       <div className="w-full max-w-[420px] relative z-10 animate-fade-in-up">
         {/* Logo */}
-        <div className="flex items-center justify-center gap-2.5 mb-8">
-          <div className="w-9 h-9 rounded-xl gradient-accent flex items-center justify-center shadow-lg shadow-accent/20">
-            <Sparkles size={16} className="text-white" />
+        <Link to="/" className="flex items-center justify-center gap-2.5 mb-8">
+          <div className="w-9 h-9 rounded-xl bg-primary flex items-center justify-center shadow-sm">
+            <Building2 size={16} className="text-white" strokeWidth={2.25} />
           </div>
           <span className="text-xl font-bold tracking-tight text-primary">
             Estate<span className="text-accent">AI</span>
           </span>
-        </div>
+        </Link>
 
         {/* Card */}
         <div className="bg-white rounded-2xl shadow-xl shadow-black/[0.03] border border-border/40 p-6 sm:p-8">

@@ -24,20 +24,17 @@ export default function AdminDashboard() {
   const [tab, setTab] = useState('overview');
 
   return (
-    <div className="min-h-screen pt-24 pb-16 mesh-gradient">
+    <div className="min-h-screen pt-24 pb-16 bg-surface">
       <div className="max-w-6xl mx-auto px-4 sm:px-6">
         {/* Header */}
         <div className="mb-8 animate-fade-in-up">
-          <div className="flex items-center gap-3 mb-3">
-            <div className="w-10 h-10 rounded-xl gradient-accent flex items-center justify-center shadow-lg shadow-accent/20">
+          <div className="flex items-center gap-3 mb-2">
+            <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center shadow-sm">
               <Shield size={18} className="text-white" />
             </div>
-            <div>
-              <p className="text-xs font-semibold uppercase tracking-wider text-accent">Admin Panel</p>
-              <h1 className="text-2xl sm:text-3xl font-bold text-primary tracking-tight">Dashboard</h1>
-            </div>
+            <h1 className="text-2xl sm:text-3xl font-bold text-primary tracking-tight">Admin dashboard</h1>
           </div>
-          <p className="text-sm text-muted">Manage users, properties, and platform settings.</p>
+          <p className="text-sm text-muted">Manage users, properties, testimonials, and visitor activity.</p>
         </div>
 
         {/* Tabs */}

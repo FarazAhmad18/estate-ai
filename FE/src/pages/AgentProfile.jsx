@@ -167,7 +167,7 @@ export default function AgentProfile() {
   };
 
   if (loading) return (
-    <div className="min-h-screen pt-24 pb-16 mesh-gradient">
+    <div className="min-h-screen pt-24 pb-16 bg-surface">
       <div className="max-w-4xl mx-auto px-4 sm:px-6">
         <div className="flex items-center gap-4 mb-8">
           <div className="w-10 h-10 rounded-full skeleton" />
@@ -199,7 +199,7 @@ export default function AgentProfile() {
   const userInitial = agent.name?.charAt(0)?.toUpperCase() || '?';
 
   return (
-    <div className="min-h-screen pt-20 pb-16 mesh-gradient">
+    <div className="min-h-screen pt-20 pb-16 bg-surface">
       <div className="max-w-6xl mx-auto px-4 sm:px-6">
         <button
           onClick={() => navigate(-1)}
@@ -211,11 +211,11 @@ export default function AgentProfile() {
         {/* Agent Header */}
         <div className="bg-white rounded-2xl border border-border/50 p-6 sm:p-8 animate-fade-in-up">
           <div className="flex flex-col sm:flex-row items-start sm:items-center gap-5 sm:gap-6">
-            <div className="w-20 h-20 rounded-full gradient-accent flex items-center justify-center overflow-hidden flex-shrink-0 ring-4 ring-white shadow-lg">
+            <div className="w-20 h-20 rounded-2xl bg-surface flex items-center justify-center overflow-hidden flex-shrink-0 border border-border/60 shadow-sm">
               {agent.avatar_url ? (
                 <img src={agent.avatar_url} alt={agent.name} className="w-full h-full object-cover" />
               ) : (
-                <span className="text-2xl font-bold text-white">{userInitial}</span>
+                <span className="text-2xl font-bold text-secondary">{userInitial}</span>
               )}
             </div>
             <div className="flex-1">
@@ -437,11 +437,11 @@ export default function AgentProfile() {
                     <div key={review.id} className="bg-white rounded-2xl border border-border/50 p-6 hover:shadow-md hover:shadow-black/[0.03] transition-all duration-200">
                       <div className="flex items-start justify-between">
                         <div className="flex items-center gap-3">
-                          <div className="w-10 h-10 rounded-full gradient-accent flex items-center justify-center overflow-hidden">
+                          <div className="w-10 h-10 rounded-full bg-surface flex items-center justify-center overflow-hidden border border-border/60">
                             {review.Reviewer?.avatar_url ? (
                               <img src={review.Reviewer.avatar_url} alt="" className="w-full h-full object-cover" />
                             ) : (
-                              <span className="text-xs font-bold text-white">{review.Reviewer?.name?.charAt(0)?.toUpperCase() || '?'}</span>
+                              <span className="text-xs font-bold text-secondary">{review.Reviewer?.name?.charAt(0)?.toUpperCase() || '?'}</span>
                             )}
                           </div>
                           <div>

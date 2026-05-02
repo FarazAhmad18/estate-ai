@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { MapPin, BedDouble, Maximize, ArrowUpRight, Heart } from 'lucide-react';
+import { MapPin, BedDouble, Maximize, ArrowUpRight, Heart, Building2 } from 'lucide-react';
 
 export default function PropertyCard({ property, isFavorited, onToggleFavorite }) {
   const [heartPop, setHeartPop] = useState(false);
@@ -24,8 +24,9 @@ export default function PropertyCard({ property, isFavorited, onToggleFavorite }
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
           />
         ) : (
-          <div className="w-full h-full flex items-center justify-center text-muted bg-gradient-to-br from-surface to-surface-2">
-            <Maximize size={32} />
+          <div className="w-full h-full flex flex-col items-center justify-center gap-2 text-muted bg-surface-2">
+            <Building2 size={32} strokeWidth={1.5} />
+            <span className="text-xs">No photos yet</span>
           </div>
         )}
         {/* Gradient overlay on hover */}
